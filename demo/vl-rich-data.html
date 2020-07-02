@@ -21,37 +21,8 @@
 	<body>
     <vl-demo-page data-vl-webcomponent="vl-rich-data" data-vl-link="https://overheid.vlaanderen.be/webuniversum/v3/documentation/atoms/vl-ui-rich-data">
       <vl-demo data-vl-title="Rich data">
-        <vl-rich-data id="rich-data-filter-sorting-paging" data-vl-filter-closable>
-          <vl-search-results slot="content">
-            <vl-search-result>
-              <a href="#" slot="title">Project #1</a>
-              <time slot="sub-title">Gestart op maandag 22 oktober 2018</time>
-              <dl slot="content">
-                <dt>ID</dt>
-                <dd>0</dd>
-                <dt>Naam manger</dt>
-                <dd>Riquier</dd>
-                <dt>Eerste medewerker</dt>
-                <dd>Kleykens</dd>
-                <dt>Project o.l.v. <b>manager</b></dt>
-                <dd>Project #1 o.l.v. <b>Pascal Riquier</b></dd>
-              </dl>
-            </vl-search-result>
-            <vl-search-result>
-              <a href="#" slot="title">Project #2</a>
-              <time slot="sub-title">Gestart op maandag 22 oktober 2018</time>
-              <dl slot="content">
-                <dt>ID</dt>
-                <dd>1</dd>
-                <dt>Naam manger</dt>
-                <dd>Coemans</dd>
-                <dt>Eerste medewerker</dt>
-                <dd>Wauters</dd>
-                <dt>Project o.l.v. <b>manager</b></dt>
-                <dd>Project #1 o.l.v. <b>Tom Coemans</b></dd>
-              </dl>
-            </vl-search-result>
-          </vl-search-results>
+        <vl-rich-data id="rich-data" data-vl-filter-closable>
+          <vl-search-results slot="content"></vl-search-results>
           <div slot="filter">
             <div is="vl-search-filter" alt>
               <form id="rich-data-table-filter-form" novalidate>
@@ -82,9 +53,230 @@
               </div>
             </div>
           </div>
-          <vl-pager id="rich-data-table-filter-sorting-paging-pager" slot="pager" total-items="2" items-per-page="2" current-page="1" align-center></vl-pager>
+          <vl-pager id="rich-data-table-filter-sorting-paging-pager" slot="pager" total-items="25" items-per-page="10" current-page="1" align-center></vl-pager>
         </vl-rich-data>
+
+        <script>
+          customElements.whenDefined('vl-rich-data').then(() => {
+            const element = document.querySelector('#rich-data');
+            const content = element.querySelector('[slot="content"]');
+            const pager = element.querySelector('vl-pager');
+
+            const data = {
+              'data': [{
+                'id': 0,
+                'name': 'Project #1',
+                'manager': {'firstName': 'Pascal', 'lastName': 'Riquier'},
+                'medewerkers': [{'firstName': 'Sander', 'lastName': 'Kleykens'}],
+              }, {
+                'id': 1,
+                'name': 'Project #2',
+                'manager': {'firstName': 'Tom', 'lastName': 'Coemans'},
+                'medewerkers': [{'firstName': 'Guy', 'lastName': 'Wauters'}],
+              }, {
+                'id': 2,
+                'name': 'Project #3',
+                'manager': {'firstName': 'Tom', 'lastName': 'Coemans'},
+                'medewerkers': [{'firstName': 'Guy', 'lastName': 'Wauters'}],
+              }, {
+                'id': 3,
+                'name': 'Project #4',
+                'manager': {'firstName': 'Pascal', 'lastName': 'Riquier'},
+                'medewerkers': [{'firstName': 'Pieter', 'lastName': 'Beckers'}],
+              }, {
+                'id': 4,
+                'name': 'Project #5',
+                'manager': {'firstName': 'Pascal', 'lastName': 'Riquier'},
+                'medewerkers': [{'firstName': 'Pieter', 'lastName': 'Beckers'}],
+              }, {
+                'id': 5,
+                'name': 'Project #6',
+                'manager': {'firstName': 'Pascal', 'lastName': 'Riquier'},
+                'medewerkers': [{'firstName': 'Pieter', 'lastName': 'Beckers'}],
+              }, {
+                'id': 6,
+                'name': 'Project #7',
+                'manager': {'firstName': 'Pascal', 'lastName': 'Riquier'},
+                'medewerkers': [{'firstName': 'Pieter', 'lastName': 'Beckers'}],
+              }, {
+                'id': 7,
+                'name': 'Project #8',
+                'manager': {'firstName': 'Pascal', 'lastName': 'Riquier'},
+                'medewerkers': [{'firstName': 'Pieter', 'lastName': 'Beckers'}],
+              }, {
+                'id': 8,
+                'name': 'Project #9',
+                'manager': {'firstName': 'Pascal', 'lastName': 'Riquier'},
+                'medewerkers': [{'firstName': 'Pieter', 'lastName': 'Beckers'}],
+              }, {
+                'id': 9,
+                'name': 'Project #10',
+                'manager': {'firstName': 'Pascal', 'lastName': 'Riquier'},
+                'medewerkers': [{'firstName': 'Pieter', 'lastName': 'Beckers'}],
+              }, {
+                'id': 10,
+                'name': 'Project #11',
+                'manager': {'firstName': 'Pascal', 'lastName': 'Riquier'},
+                'medewerkers': [{'firstName': 'Pieter', 'lastName': 'Beckers'}],
+              }, {
+                'id': 11,
+                'name': 'Project #12',
+                'manager': {'firstName': 'Pascal', 'lastName': 'Riquier'},
+                'medewerkers': [{'firstName': 'Pieter', 'lastName': 'Beckers'}],
+              }, {
+                'id': 12,
+                'name': 'Project #13',
+                'manager': {'firstName': 'Pascal', 'lastName': 'Riquier'},
+                'medewerkers': [{'firstName': 'Pieter', 'lastName': 'Beckers'}],
+              }, {
+                'id': 13,
+                'name': 'Project #14',
+                'manager': {'firstName': 'Pascal', 'lastName': 'Riquier'},
+                'medewerkers': [{'firstName': 'Pieter', 'lastName': 'Beckers'}],
+              }, {
+                'id': 14,
+                'name': 'Project #15',
+                'manager': {'firstName': 'Pascal', 'lastName': 'Riquier'},
+                'medewerkers': [{'firstName': 'Pieter', 'lastName': 'Beckers'}],
+              }, {
+                'id': 15,
+                'name': 'Project #16',
+                'manager': {'firstName': 'Pascal', 'lastName': 'Riquier'},
+                'medewerkers': [{'firstName': 'Pieter', 'lastName': 'Beckers'}],
+              }, {
+                'id': 16,
+                'name': 'Project #17',
+                'manager': {'firstName': 'Pascal', 'lastName': 'Riquier'},
+                'medewerkers': [{'firstName': 'Pieter', 'lastName': 'Beckers'}],
+              }, {
+                'id': 17,
+                'name': 'Project #18',
+                'manager': {'firstName': 'Pascal', 'lastName': 'Riquier'},
+                'medewerkers': [{'firstName': 'Pieter', 'lastName': 'Beckers'}],
+              }, {
+                'id': 18,
+                'name': 'Project #19',
+                'manager': {'firstName': 'Pascal', 'lastName': 'Riquier'},
+                'medewerkers': [{'firstName': 'Pieter', 'lastName': 'Beckers'}],
+              }, {
+                'id': 19,
+                'name': 'Project #20',
+                'manager': {'firstName': 'Pascal', 'lastName': 'Riquier'},
+                'medewerkers': [{'firstName': 'Pieter', 'lastName': 'Beckers'}],
+              }, {
+                'id': 20,
+                'name': 'Project #21',
+                'manager': {'firstName': 'Pascal', 'lastName': 'Riquier'},
+                'medewerkers': [{'firstName': 'Pieter', 'lastName': 'Beckers'}],
+              }, {
+                'id': 21,
+                'name': 'Project #22',
+                'manager': {'firstName': 'Pascal', 'lastName': 'Riquier'},
+                'medewerkers': [{'firstName': 'Pieter', 'lastName': 'Beckers'}],
+              }, {
+                'id': 22,
+                'name': 'Project #23',
+                'manager': {'firstName': 'Pascal', 'lastName': 'Riquier'},
+                'medewerkers': [{'firstName': 'Pieter', 'lastName': 'Beckers'}],
+              }, {
+                'id': 23,
+                'name': 'Project #24',
+                'manager': {'firstName': 'Pascal', 'lastName': 'Riquier'},
+                'medewerkers': [{'firstName': 'Pieter', 'lastName': 'Beckers'}],
+              }, {
+                'id': 24,
+                'name': 'Project #25',
+                'manager': {'firstName': 'Pascal', 'lastName': 'Riquier'},
+                'medewerkers': [{'firstName': 'Pieter', 'lastName': 'Beckers'}],
+              }],
+            };
+
+            const setContentData = (data, from, to) => {
+              content.innerHTML = ``;
+              data.slice(from, to).forEach((project) => {
+                const now = new Date().toLocaleString();
+                const manager = project.manager;
+                const medewerker = project.medewerkers[0];
+                const html = `
+                  <vl-search-result>
+                    <a href="#" slot="title">${project.name}</a>
+                    <time slot="sub-title">Gestart op ${now}</time>
+                    <dl slot="content">
+                      <dt>ID</dt>
+                      <dd>${project.id}</dd>
+                      <dt>Naam manger</dt>
+                      <dd>${manager.lastName}</dd>
+                      <dt>Eerste medewerker</dt>
+                      <dd>${medewerker.lastName}</dd>
+                      <dt>Project o.l.v. <b>manager</b></dt>
+                      <dd>${project.name} o.l.v. <b>${manager.firstName} ${manager.lastName}</b></dd>
+                    </dl>
+                  </vl-search-result>
+                `;
+                content.insertAdjacentHTML('beforeend', html);
+              });
+            };
+
+            const filter = (data, pathToKey, value) => {
+              if (value === '') {
+                return data;
+              }
+              return data.filter((element) => {
+                const valueByPath = findValueByPath(element, pathToKey);
+                return valueByPath.includes(value);
+              });
+            };
+
+            const findValueByPath = (element, pathToKey) => {
+              const keys = pathToKey.split('.');
+
+              let current = element;
+              for (let i = 0; i < keys.length; i++) {
+                if (current[keys[i]] !== undefined) {
+                  current = current[keys[i]];
+                } else {
+                  return undefined;
+                }
+              }
+              return current.toString();
+            };
+
+            setContentData(data.data, 0, pager.getAttribute('items-per-page')); // initial data
+
+            element.addEventListener('change', (e) => {
+              let newData = data.data;
+              let totalItems = data.data.length;
+
+              let filterEntries = undefined;
+              if (e.detail.formData) {
+                filterEntries = [];
+                for (const entry of e.detail.formData.entries()) {
+                  newData = filter(newData, entry[0], entry[1]);
+                  totalItems = newData.length;
+                  filterEntries.push({
+                    name: entry[0],
+                    value: entry[1],
+                  });
+                }
+              }
+
+              if (e.detail.paging) {
+                const from = (e.detail.paging.currentPage-1) * 10;
+                setContentData(newData, from, from+10);
+              }
+
+              element.data = {
+                paging: {
+                  currentPage: e.detail.paging.currentPage,
+                  totalItems: totalItems,
+                },
+                filter: filterEntries,
+              };
+            });
+          });
+        </script>
       </vl-demo>
     </vl-demo-page>
   </body>
 </html>
+  
