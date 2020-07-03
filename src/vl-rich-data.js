@@ -4,6 +4,7 @@ import '/node_modules/vl-ui-form-message/dist/vl-form-message.js';
 import '/node_modules/vl-ui-icon/dist/vl-icon.js';
 import '/node_modules/vl-ui-button/dist/vl-button.js';
 import '/node_modules/vl-ui-modal/dist/vl-modal.js';
+import '/node_modules/vl-ui-pager/dist/vl-pager.js';
 
 /**
  * VlRichData
@@ -103,6 +104,7 @@ export class VlRichData extends vlElement(HTMLElement) {
 
   connectedCallback() {
     this._observer = this.__observeSearchFilter();
+    this.__updateNumberOfSearchResults();
   }
 
   disconnectedCallback() {
@@ -358,7 +360,13 @@ export class VlRichData extends vlElement(HTMLElement) {
   }
 
   __updateNumberOfSearchResults(number) {
-    this.__numberOfSearchResultsElement.textContent = number;
+    if (number) {
+      this.__numberOfSearchResultsElement.textContent = number;
+    } else {
+      customElements.whenDefined('vl-pager').then(() => {
+        this.__numberOfSearchResultsElement.textContent = this.__pager.totalItems;
+      });
+    }
   }
 
   __addSearchFilterEventListeners() {

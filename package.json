@@ -41,6 +41,7 @@
 		"vl-ui-button": "^5.0.5",
 		"vl-ui-icon": "^5.1.0",
 		"vl-ui-modal": "^3.0.8",
+		"vl-ui-pager": "^3.0.1",
 		"vl-ui-form-message": "^5.0.3"
 	},
 	"peerDependencies": {
@@ -48,6 +49,7 @@
 		"vl-ui-button": "^5.0.5",
 		"vl-ui-icon": "^5.1.0",
 		"vl-ui-modal": "^3.0.8",
+		"vl-ui-pager": "^3.0.1",
 		"vl-ui-form-message": "^5.0.3"
 	},
 	"devDependencies": {
@@ -55,8 +57,6 @@
 		"vl-ui-util": "^5.2.8",
 		"vl-ui-search-filter": "^3.1.0",
 		"vl-ui-input-field": "^3.1.0",
-		"vl-ui-pager": "^3.0.1",
-		"vl-ui-search-results": "milieuinfo/webcomponent-vl-ui-search-results#setup",
-		"vl-ui-select": "^4.1.0"
+		"vl-ui-search-results": "milieuinfo/webcomponent-vl-ui-search-results#setup"
 	}
 }
