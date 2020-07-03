@@ -90,6 +90,18 @@
         assert.equal(element.__searchResultsElement.innerText, `We vonden ${value.paging.totalItems} resultaten`);
         assert.equal(element.__numberOfSearchResultsElement.innerText, value.paging.totalItems);
       });
+
+      test('initieel zal het total items van de vl-pager opgevraagd worden op het aantal zoekresultaten te visualiseren', (done) => {
+        const element = fixture('vl-rich-data-pager-fixture');
+        const count = element.__pager.totalItems;
+        customElements.whenDefined('vl-pager').then(() => {
+          should.exist(element.__searchResultsElement);
+          should.exist(element.__numberOfSearchResultsElement);
+          assert.equal(element.__searchResultsElement.innerText, `We vonden ${count} resultaten`);
+          assert.equal(element.__numberOfSearchResultsElement.innerText, count);
+          done();
+        });
+      });
     });
   </script>
 </body>

@@ -1,6 +1,9 @@
 import {vlElement, define} from 'vl-ui-core';
 import 'vl-ui-grid';
+import 'vl-ui-icon';
+import 'vl-ui-button';
 import 'vl-ui-modal';
+import 'vl-ui-pager';
 
 /**
  * VlRichData
@@ -62,15 +65,14 @@ export class VlRichData extends vlElement(HTMLElement) {
               <slot id="filter-slot" name="filter"></slot>
             </div>
           </div>
-          <div id="content" is="vl-column" size="12" small-size="12">
+          <div id="content" is="vl-column" size="12">
             <div is="vl-grid" is-stacked>
-              <div id="search-results" is="vl-column" size="12" small-size="12">
+              <div id="search-results" is="vl-column" size="8" small-size="6">
                 <span>We vonden</span>
                 <strong><span id="search-results-number">0</span> resultaten</strong>
               </div>
-              <div is="vl-column" size="12" small-size="12">
-                <slot name="content"></slot>
-                ${content}
+              <div is="vl-column" size="12">
+                <slot name="content">${content}</slot>
               </div>
             </div>
           </div>
@@ -90,6 +92,7 @@ export class VlRichData extends vlElement(HTMLElement) {
 
   connectedCallback() {
     this._observer = this.__observeSearchFilter();
+    this.__updateNumberOfSearchResults();
   }
 
   disconnectedCallback() {
@@ -345,7 +348,13 @@ export class VlRichData extends vlElement(HTMLElement) {
   }
 
   __updateNumberOfSearchResults(number) {
-    this.__numberOfSearchResultsElement.textContent = number;
+    if (number) {
+      this.__numberOfSearchResultsElement.textContent = number;
+    } else {
+      customElements.whenDefined('vl-pager').then(() => {
+        this.__numberOfSearchResultsElement.textContent = this.__pager.totalItems;
+      });
+    }
   }
 
   __addSearchFilterEventListeners() {
