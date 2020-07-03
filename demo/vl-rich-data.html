@@ -6,6 +6,7 @@
 
     <script type="module" src="/src/vl-rich-data.js"></script>
     <script type="module" src="/node_modules/vl-ui-search-results/dist/vl-search-results-all.js"></script>
+    <script type="module" src="/node_modules/vl-ui-select/dist/vl-select.js"></script>
     <script type="module" src="/node_modules/vl-ui-search-filter/dist/vl-search-filter.js"></script>
     <script type="module" src="/node_modules/vl-ui-pager/dist/vl-pager.js"></script>
     <script type="module" src="/node_modules/vl-ui-input-field/dist/vl-input-field.js"></script>
@@ -13,6 +14,7 @@
 
     <link rel="stylesheet" type="text/css" href="/node_modules/vl-ui-core/dist/style.css" />
     <link rel="stylesheet" type="text/css" href="/node_modules/vl-ui-search-results/dist/style.css" />
+    <link rel="stylesheet" type="text/css" href="/node_modules/vl-ui-select/dist/style.css" />
     <link rel="stylesheet" type="text/css" href="/node_modules/vl-ui-search-filter/dist/style.css" />
     <link rel="stylesheet" type="text/css" href="/node_modules/vl-ui-input-field/dist/style.css" />
     <link rel="stylesheet" type="text/css" href="/node_modules/vl-ui-button/dist/style.css" />
@@ -23,6 +25,11 @@
       <vl-demo data-vl-title="Rich data">
         <vl-rich-data id="rich-data" data-vl-filter-closable>
           <vl-search-results slot="content"></vl-search-results>
+          <select is="vl-select" slot="sorter">
+            <option value="id">ID</option>
+            <option value="manager.lastname">Naam manager</option>
+            <option value="medewerker.lastname">Eerste medewerker</option>
+          </select>
           <div slot="filter">
             <div is="vl-search-filter" alt>
               <form id="rich-data-table-filter-form" novalidate>
@@ -60,6 +67,7 @@
           customElements.whenDefined('vl-rich-data').then(() => {
             const element = document.querySelector('#rich-data');
             const content = element.querySelector('[slot="content"]');
+            const sorter = element.querySelector('[slot="sorter"]');
             const pager = element.querySelector('vl-pager');
 
             const data = {
@@ -190,6 +198,7 @@
                 'medewerkers': [{'firstName': 'Pieter', 'lastName': 'Beckers'}],
               }],
             };
+            let newData = data.data;
 
             const setContentData = (data, from, to) => {
               content.innerHTML = ``;
@@ -241,14 +250,14 @@
               return current.toString();
             };
 
-            element.addEventListener('change', (e) => {
-              let newData = data.data;
+            element.addEventListener('change', (event) => {
+              newData = data.data;
               let totalItems = data.data.length;
 
               let filterEntries = undefined;
-              if (e.detail.formData) {
+              if (event.detail.formData) {
                 filterEntries = [];
-                for (const entry of e.detail.formData.entries()) {
+                for (const entry of event.detail.formData.entries()) {
                   newData = filter(newData, entry[0], entry[1]);
                   totalItems = newData.length;
                   filterEntries.push({
@@ -258,18 +267,26 @@
                 }
               }
 
-              if (e.detail.paging) {
-                const from = (e.detail.paging.currentPage-1) * 10;
+              if (event.detail.paging) {
+                const from = (event.detail.paging.currentPage-1) * 10;
                 setContentData(newData, from, from+10);
               }
 
               element.data = {
                 paging: {
-                  currentPage: e.detail.paging.currentPage,
+                  currentPage: event.detail.paging.currentPage,
                   totalItems: totalItems,
                 },
                 filter: filterEntries,
               };
+            });
+
+            sorter.addEventListener('change', (event) => {
+              event.stopPropagation();
+              newData.sort((firstElement, secondElement) => {
+                return firstElement[event.target.value] < secondElement[event.target.value];
+              });
+              setContentData(newData, 0, 10);
             });
 
             // initial data
