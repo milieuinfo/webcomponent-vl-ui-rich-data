@@ -17,7 +17,11 @@
     position: absolute;
     top: 1.5rem;
     right: 0;
-    padding: 0;
+    padding: 3px 0px 0px 0px;
     border: 0;
     overflow: hidden;
+}
+
+#search-results {
+    line-height: 3em;
 }

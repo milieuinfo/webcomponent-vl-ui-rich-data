@@ -241,8 +241,6 @@
               return current.toString();
             };
 
-            setContentData(data.data, 0, pager.getAttribute('items-per-page')); // initial data
-
             element.addEventListener('change', (e) => {
               let newData = data.data;
               let totalItems = data.data.length;
@@ -273,6 +271,15 @@
                 filter: filterEntries,
               };
             });
+
+            // initial data
+            setContentData(data.data, 0, pager.getAttribute('items-per-page'));
+            element.data = {
+              paging: {
+                currentPage: 0,
+                totalItems: 25,
+              },
+            };
           });
         </script>
       </vl-demo>
