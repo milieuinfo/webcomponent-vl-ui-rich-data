@@ -40,14 +40,6 @@ export class VlRichData extends vlElement(HTMLElement) {
         @import "/node_modules/vl-ui-form-message/dist/style.css";
         @import "/node_modules/vl-ui-icon/dist/style.css";
         @import "/node_modules/vl-ui-button/dist/style.css";
-
-        #sorter {
-          text-align: right;
-        }
-
-        #sorter label {
-          margin-right: 10px;
-        }
       </style>
       ${style}
       <div>
