@@ -59,8 +59,16 @@ export class VlRichData extends vlElement(HTMLElement) {
             </div>
           </div>
           <div id="content" is="vl-column" size="12" small-size="12">
-            <slot name="content"></slot>
-            ${content}
+            <div is="vl-grid" is-stacked>
+              <div id="search-results" is="vl-column" size="12" small-size="12">
+                <span>We vonden</span>
+                <strong><span id="search-results-number">0</span> resultaten</strong>
+              </div>
+              <div is="vl-column" size="12" small-size="12">
+                <slot name="content"></slot>
+                ${content}
+              </div>
+            </div>
           </div>
           <div id="pager" is="vl-column" size="12">
             <slot name="pager"></slot>
@@ -142,6 +150,14 @@ export class VlRichData extends vlElement(HTMLElement) {
     return this.shadowRoot.querySelector('#toggle-filter-button');
   }
 
+  get __searchResultsElement() {
+    return this.shadowRoot.querySelector('#search-results');
+  }
+
+  get __numberOfSearchResultsElement() {
+    return this.__searchResultsElement.querySelector('#search-results-number');
+  }
+
   get __pager() {
     return this.querySelector('[slot="pager"]');
   }
@@ -182,6 +198,35 @@ export class VlRichData extends vlElement(HTMLElement) {
     }
   }
 
+  set _paging(paging) {
+    if (paging) {
+      if (paging.currentPage != null) {
+        this.__pager.setAttribute('current-page', paging.currentPage);
+      }
+      if (paging.itemsPerPage != null) {
+        this.__pager.setAttribute('items-per-page', paging.itemsPerPage);
+      }
+      if (paging.totalItems != null) {
+        this.__pager.setAttribute('total-items', paging.totalItems);
+        this.__updateNumberOfSearchResults(paging.totalItems);
+      }
+    }
+  }
+
+  set _filter(filter) {
+    if (filter && this.__searchFilter) {
+      const form = this.__searchFilter.querySelector('form');
+      if (form) {
+        filter.forEach((entry) => {
+          const formElement = form.elements[entry.name];
+          if (formElement) {
+            formElement.value = entry.value;
+          }
+        });
+      }
+    }
+  }
+
   __onStateChange(event, {paging = false} = {}) {
     event.stopPropagation();
     event.preventDefault();
@@ -199,34 +244,6 @@ export class VlRichData extends vlElement(HTMLElement) {
       state.paging.currentPage = 1;
     }
     return state;
-  }
-
-  set _paging(paging) {
-    if (paging) {
-      if (paging.currentPage != null) {
-        this.__pager.setAttribute('current-page', paging.currentPage);
-      }
-      if (paging.itemsPerPage != null) {
-        this.__pager.setAttribute('items-per-page', paging.itemsPerPage);
-      }
-      if (paging.totalItems != null) {
-        this.__pager.setAttribute('total-items', paging.totalItems);
-      }
-    }
-  }
-
-  set _filter(filter) {
-    if (filter && this.__searchFilter) {
-      const form = this.__searchFilter.querySelector('form');
-      if (form) {
-        filter.forEach((entry) => {
-          const formElement = form.elements[entry.name];
-          if (formElement) {
-            formElement.value = entry.value;
-          }
-        });
-      }
-    }
   }
 
   _filterClosableChangedCallback(oldValue, newValue) {
@@ -321,6 +338,10 @@ export class VlRichData extends vlElement(HTMLElement) {
   __setGridColumnWidth(width) {
     this.__searchColumn.setAttribute('size', width);
     this.__contentColumn.setAttribute('size', 12 - width);
+  }
+
+  __updateNumberOfSearchResults(number) {
+    this.__numberOfSearchResultsElement.textContent = number;
   }
 
   __addSearchFilterEventListeners() {
