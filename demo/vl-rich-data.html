@@ -27,8 +27,7 @@
           <vl-search-results slot="content"></vl-search-results>
           <select is="vl-select" slot="sorter">
             <option value="id">ID</option>
-            <option value="manager.lastname">Naam manager</option>
-            <option value="medewerker.lastname">Eerste medewerker</option>
+            <option value="manager.lastName">Naam manager</option>
           </select>
           <div slot="filter">
             <div is="vl-search-filter" alt>
@@ -284,8 +283,17 @@
             sorter.addEventListener('change', (event) => {
               event.stopPropagation();
               newData.sort((firstElement, secondElement) => {
-                return firstElement[event.target.value] < secondElement[event.target.value];
+                const keys = event.target.value.split('.');
+                firstValue = (keys.reduce((value, key) => value[key], firstElement)).toString();
+                secondValue = (keys.reduce((value, key) => value[key], secondElement)).toString();
+                return firstValue.localeCompare(secondValue);
               });
+              element.data = {
+                paging: {
+                  currentPage: 0,
+                  totalItems: newData.length,
+                },
+              };
               setContentData(newData, 0, 10);
             });
 
