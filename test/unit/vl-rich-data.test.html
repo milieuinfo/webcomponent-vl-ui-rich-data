@@ -36,7 +36,9 @@
         should.exist(grid.getAttribute('is-stacked'));
         const contentColumn = grid.querySelector('div#content[is="vl-column"]');
         should.exist(contentColumn);
-        assert.equal(contentColumn.getAttribute('size'), 12);
+        ['size', 'medium-size', 'small-size', 'extra-small-size'].forEach; ((size) => {
+          assert.equal(contentColumn.getAttribute(size), 12);
+        });
       });
 
       test('de paginatie kan gezet worden via de data setter', () => {

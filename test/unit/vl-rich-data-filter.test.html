@@ -148,16 +148,20 @@
         const element = fixture('vl-rich-data-zonder-filter-fixture');
         const content = element.shadowRoot.querySelector('#content');
         const search = element.shadowRoot.querySelector('#search');
-        expect(content.getAttribute('size')).to.be.equal('12');
-        expect(search.getAttribute('size')).to.be.equal('0');
+        ['size', 'medium-size'].forEach((size) => {
+          expect(content.getAttribute(size)).to.be.equal('12');
+          expect(search.getAttribute(size)).to.be.equal('0');
+        });
       });
 
       test('als er een searchfilter aanwezig is, wordt er plaats voor voorzien', () => {
         const element = fixture('vl-rich-data-met-filter-fixture');
         const content = element.shadowRoot.querySelector('#content');
         const search = element.shadowRoot.querySelector('#search');
-        expect(content.getAttribute('size')).to.be.equal('8');
-        expect(search.getAttribute('size')).to.be.equal('4');
+        ['size', 'medium-size'].forEach((size) => {
+          expect(content.getAttribute(size)).to.be.equal('8');
+          expect(search.getAttribute(size)).to.be.equal('4');
+        });
       });
 
       test('als er een searchfilter wordt toegevoegd, wordt er plaats voor voorzien', (done) => {
@@ -181,8 +185,10 @@
         setTimeout(() => {
           const content = element.shadowRoot.querySelector('#content');
           const search = element.shadowRoot.querySelector('#search');
-          expect(content.getAttribute('size')).to.be.equal('8');
-          expect(search.getAttribute('size')).to.be.equal('4');
+          ['size', 'medium-size'].forEach((size) => {
+            expect(content.getAttribute(size)).to.be.equal('8');
+            expect(search.getAttribute(size)).to.be.equal('4');
+          });
           done();
         });
       });
@@ -194,8 +200,10 @@
         setTimeout(() => {
           const content = element.shadowRoot.querySelector('#content');
           const search = element.shadowRoot.querySelector('#search');
-          expect(content.getAttribute('size')).to.be.equal('12');
-          expect(search.getAttribute('size')).to.be.equal('0');
+          ['size', 'medium-size'].forEach((size) => {
+            expect(content.getAttribute(size)).to.be.equal('12');
+            expect(search.getAttribute(size)).to.be.equal('0');
+          });
           done();
         });
       });
@@ -251,20 +259,25 @@
         const element = fixture('vl-rich-data-met-closable-filter-fixture');
         const content = element.shadowRoot.querySelector('#content');
         const search = element.shadowRoot.querySelector('#search');
-        expect(content.getAttribute('size')).to.be.equal('8');
-        expect(search.getAttribute('size')).to.be.equal('4');
+        ['size', 'medium-size'].forEach((size) => {
+          expect(content.getAttribute(size)).to.be.equal('8');
+          expect(search.getAttribute(size)).to.be.equal('4');
+        });
         expect(search.hidden).to.be.false;
 
         element.setAttribute('data-vl-filter-closed', '');
 
-        expect(content.getAttribute('size')).to.be.equal('12');
-        expect(search.getAttribute('size')).to.be.equal('0');
+        ['size', 'medium-size'].forEach((size) => {
+          expect(content.getAttribute('size')).to.be.equal('12');
+          expect(search.getAttribute('size')).to.be.equal('0');
+        });
         expect(search.hidden).to.be.true;
 
         element.removeAttribute('data-vl-filter-closed');
-
-        expect(content.getAttribute('size')).to.be.equal('8');
-        expect(search.getAttribute('size')).to.be.equal('4');
+        ['size', 'medium-size'].forEach((size) => {
+          expect(content.getAttribute(size)).to.be.equal('8');
+          expect(search.getAttribute(size)).to.be.equal('4');
+        });
         expect(search.hidden).to.be.false;
       });
 
