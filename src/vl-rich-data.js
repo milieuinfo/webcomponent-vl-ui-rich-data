@@ -347,9 +347,11 @@ export class VlRichData extends vlElement(HTMLElement) {
     if (number) {
       this.__numberOfSearchResultsElement.textContent = number;
     } else {
-      customElements.whenDefined('vl-pager').then(() => {
-        this.__numberOfSearchResultsElement.textContent = this.__pager.totalItems;
-      });
+      if (this.__pager) {
+        customElements.whenDefined('vl-pager').then(() => {
+          this.__numberOfSearchResultsElement.textContent = this.__pager.totalItems || 0;
+        });
+      }
     }
   }
 

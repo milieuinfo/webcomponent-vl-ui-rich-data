@@ -102,6 +102,19 @@
           done();
         });
       });
+
+      test('wanneer de total items van de vl-pager leeg of undefined is, zal 0 getoond worden', (done) => {
+        const element = fixture('vl-rich-data-pager-fixture');
+        const pager = element.__pager;
+        pager.setAttribute('total-items', '');
+        customElements.whenDefined('vl-pager').then(() => {
+          should.exist(element.__searchResultsElement);
+          should.exist(element.__numberOfSearchResultsElement);
+          assert.equal(element.__searchResultsElement.innerText, `We vonden 0 resultaten`);
+          assert.equal(element.__numberOfSearchResultsElement.innerText, '0');
+          done();
+        });
+      });
     });
   </script>
 </body>
