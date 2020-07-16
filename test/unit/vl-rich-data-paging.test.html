@@ -1,0 +1,56 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <script src="../../../@webcomponents/webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../../../web-component-tester/browser.js"></script>
+
+    <script type="module" src="../../src/vl-rich-data.js"></script>
+    <script type="module" src="/node_modules/vl-ui-pager/dist/vl-pager.js"></script>
+    <link rel="stylesheet" type="text/css" href="/node_modules/vl-ui-core/dist/style.css"/>
+</head>
+
+<body>
+  <test-fixture id="vl-rich-data-pager-fixture">
+    <template>
+      <vl-rich-data>
+        <vl-pager slot="pager" total-items="20" items-per-page="5" current-page="1"></vl-pager>
+      </vl-rich-data>
+    </template>
+  </test-fixture>
+
+  <script>
+    suite('vl-rich-data met paging', () => {
+      const should = chai.should();
+
+      test('de pager wordt in een kolom van volledige breedete in een grid getoond', () => {
+        const element = fixture('vl-rich-data-pager-fixture');
+        const grid = element.shadowRoot.querySelector('div[is="vl-grid"]');
+        should.exist(grid);
+        const pagerColumn = grid.querySelector('div#pager[is="vl-column"]');
+        should.exist(pagerColumn);
+        assert.equal(pagerColumn.getAttribute('size'), 12);
+        const pagerSlot = pagerColumn.querySelector('slot[name="pager"]');
+        should.exist(pagerSlot);
+        const pager = pagerSlot.assignedElements()[0];
+        should.exist(pager);
+        assert.equal(pager.tagName, 'VL-PAGER');
+        should.exist(pager.getAttribute('align-right'));
+      });
+
+      test('wanneer de pager verandert, wordt een change event gegooid zodat de afnemer andere data kan opzoeken en zetten', (done) => {
+        const element = fixture('vl-rich-data-pager-fixture');
+        element.addEventListener('change', (event) => {
+          assert.equal(event.detail.paging.currentPage, 2);
+          done();
+        });
+        const pager = element.shadowRoot.querySelector('slot[name="pager"]').assignedElements()[0];
+        assert.equal(pager.currentPage, 1);
+        pager.shadowRoot.querySelector('#page-forward-link').click();
+      });
+    });
+  </script>
+</body>
+
+</html>
