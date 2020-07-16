@@ -1,6 +1,9 @@
 import {vlElement, define} from '/node_modules/vl-ui-core/dist/vl-core.js';
 import '/node_modules/vl-ui-grid/dist/vl-grid.js';
+import '/node_modules/vl-ui-icon/dist/vl-icon.js';
+import '/node_modules/vl-ui-button/dist/vl-button.js';
 import '/node_modules/vl-ui-modal/dist/vl-modal.js';
+import '/node_modules/vl-ui-pager/dist/vl-pager.js';
 
 /**
  * VlRichData
@@ -58,9 +61,16 @@ export class VlRichData extends vlElement(HTMLElement) {
               <slot id="filter-slot" name="filter"></slot>
             </div>
           </div>
-          <div id="content" is="vl-column" size="12" small-size="12">
-            <slot name="content"></slot>
-            ${content}
+          <div id="content" is="vl-column" size="12">
+            <div is="vl-grid" is-stacked>
+              <div id="search-results" is="vl-column" size="8" small-size="6">
+                <span>We vonden</span>
+                <strong><span id="search-results-number">0</span> resultaten</strong>
+              </div>
+              <div is="vl-column" size="12">
+                <slot name="content">${content}</slot>
+              </div>
+            </div>
           </div>
           <div id="pager" is="vl-column" size="12">
             <slot name="pager"></slot>
@@ -78,6 +88,7 @@ export class VlRichData extends vlElement(HTMLElement) {
 
   connectedCallback() {
     this._observer = this.__observeSearchFilter();
+    this.__updateNumberOfSearchResults();
   }
 
   disconnectedCallback() {
@@ -142,6 +153,14 @@ export class VlRichData extends vlElement(HTMLElement) {
     return this.shadowRoot.querySelector('#toggle-filter-button');
   }
 
+  get __searchResultsElement() {
+    return this.shadowRoot.querySelector('#search-results');
+  }
+
+  get __numberOfSearchResultsElement() {
+    return this.__searchResultsElement.querySelector('#search-results-number');
+  }
+
   get __pager() {
     return this.querySelector('[slot="pager"]');
   }
@@ -182,6 +201,35 @@ export class VlRichData extends vlElement(HTMLElement) {
     }
   }
 
+  set _paging(paging) {
+    if (paging) {
+      if (paging.currentPage != null) {
+        this.__pager.setAttribute('current-page', paging.currentPage);
+      }
+      if (paging.itemsPerPage != null) {
+        this.__pager.setAttribute('items-per-page', paging.itemsPerPage);
+      }
+      if (paging.totalItems != null) {
+        this.__pager.setAttribute('total-items', paging.totalItems);
+        this.__updateNumberOfSearchResults(paging.totalItems);
+      }
+    }
+  }
+
+  set _filter(filter) {
+    if (filter && this.__searchFilter) {
+      const form = this.__searchFilter.querySelector('form');
+      if (form) {
+        filter.forEach((entry) => {
+          const formElement = form.elements[entry.name];
+          if (formElement) {
+            formElement.value = entry.value;
+          }
+        });
+      }
+    }
+  }
+
   __onStateChange(event, {paging = false} = {}) {
     event.stopPropagation();
     event.preventDefault();
@@ -199,34 +247,6 @@ export class VlRichData extends vlElement(HTMLElement) {
       state.paging.currentPage = 1;
     }
     return state;
-  }
-
-  set _paging(paging) {
-    if (paging) {
-      if (paging.currentPage != null) {
-        this.__pager.setAttribute('current-page', paging.currentPage);
-      }
-      if (paging.itemsPerPage != null) {
-        this.__pager.setAttribute('items-per-page', paging.itemsPerPage);
-      }
-      if (paging.totalItems != null) {
-        this.__pager.setAttribute('total-items', paging.totalItems);
-      }
-    }
-  }
-
-  set _filter(filter) {
-    if (filter && this.__searchFilter) {
-      const form = this.__searchFilter.querySelector('form');
-      if (form) {
-        filter.forEach((entry) => {
-          const formElement = form.elements[entry.name];
-          if (formElement) {
-            formElement.value = entry.value;
-          }
-        });
-      }
-    }
   }
 
   _filterClosableChangedCallback(oldValue, newValue) {
@@ -321,6 +341,18 @@ export class VlRichData extends vlElement(HTMLElement) {
   __setGridColumnWidth(width) {
     this.__searchColumn.setAttribute('size', width);
     this.__contentColumn.setAttribute('size', 12 - width);
+  }
+
+  __updateNumberOfSearchResults(number) {
+    if (number) {
+      this.__numberOfSearchResultsElement.textContent = number;
+    } else {
+      if (this.__pager) {
+        customElements.whenDefined('vl-pager').then(() => {
+          this.__numberOfSearchResultsElement.textContent = this.__pager.totalItems || 0;
+        });
+      }
+    }
   }
 
   __addSearchFilterEventListeners() {

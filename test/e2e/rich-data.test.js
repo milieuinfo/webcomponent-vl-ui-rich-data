@@ -105,6 +105,9 @@ describe('vl-rich-data', async () => {
     vlRichDataPage.resetSearchFilter(searchFilter);
     searchResults = await vlRichDataPage.getSearchResults(richData);
     await assert.eventually.lengthOf(searchResults.getSearchResults(), 10);
+
+    await searchFilterId.clear();
+    await searchFilterName.clear();
   });
 
   it('Als gebruiker kan ik de filter sluiten met de sluit knop en terug openen met de filter knop', async () => {
@@ -145,6 +148,22 @@ describe('vl-rich-data', async () => {
 
     const searchResults = await vlRichDataPage.getSearchResults(richData);
     await assert.eventually.lengthOf(searchResults.getSearchResults(), 1);
+
+    await richData.openModalSearchFilter();
+    await searchFilterId.clear();
+    await searchFilterName.clear();
+  });
+
+  it('Als gebruiker kan ik zien hoeveel zoekresultaten er zijn', async () => {
+    const richData = await vlRichDataPage.getRichData();
+    const searchFilter = await richData.getSearchFilter();
+    const searchFilterName = await vlRichDataPage.getSearchFilterInputFieldByName(searchFilter, 'name');
+
+    await assert.eventually.equal(richData.getNumberOfSearchResults(), 25);
+    await searchFilterName.setValue('20');
+    await assert.eventually.equal(richData.getNumberOfSearchResults(), 1);
+
+    await searchFilterName.clear();
   });
 
   const changeWindowWidth = async (size) => {
