@@ -44,17 +44,17 @@ export class VlRichData extends vlElement(HTMLElement) {
       ${style}
       <div>
         <div is="vl-grid" is-stacked>
-          <div id="toggle-filter" is="vl-column" class="vl-u-align-right vl-u-hidden--s" hidden size="12">
+          <div id="toggle-filter" is="vl-column" class="vl-u-align-right vl-u-hidden--s" hidden size="12" medium-size="12">
             <button id="toggle-filter-button" is="vl-button-link" type="button" aria-label="Toon de filter">
               <span is="vl-icon" data-vl-icon="content-filter" data-vl-before></span><slot name="toggle-filter-button-text">Filter</slot>
             </button>
           </div>
-          <div id="open-filter" is="vl-column" class="vl-u-align-right vl-u-hidden" hidden size="12">
+          <div id="open-filter" is="vl-column" class="vl-u-align-right vl-u-hidden" hidden size="12" medium-size="12">
             <button id="open-filter-button" is="vl-button-link" type="button" aria-label="Toon de filter">
               <span is="vl-icon" data-vl-icon="content-filter" data-vl-before></span><slot name="toggle-filter-button-text">Filter</slot>
             </button>
           </div>
-          <div id="search" is="vl-column" size="0" small-size="0">
+          <div id="search" is="vl-column" size="0" medium-size="0" small-size="0" extra-small-size="0">
             <button id="close-filter-button" class="vl-filter__close" hidden type="button">
               <span is="vl-icon" data-vl-icon="close"></span>
               <span class="vl-u-visually-hidden"><slot name="close-filter-button-text">Filter sluiten</slot></span>
@@ -63,24 +63,24 @@ export class VlRichData extends vlElement(HTMLElement) {
               <slot id="filter-slot" name="filter"></slot>
             </div>
           </div>
-          <div id="content" is="vl-column" size="12">
+          <div id="content" is="vl-column" size="12" medium-size="12" small-size="12" extra-small-size="12">
             <div is="vl-grid" is-stacked>
-              <div id="search-results" is="vl-column" size="8" small-size="6">
+              <div id="search-results" is="vl-column" size="6" medium-size="6" small-size="6" extra-small-size="6">
                 <span>We vonden</span>
                 <strong><span id="search-results-number">0</span> resultaten</strong>
               </div>
-              <div id="sorter" is="vl-column" size="4" small-size="6">
+              <div id="sorter" is="vl-column" size="6" medium-size="6" small-size="6" extra-small-size="6">
                 <label is="vl-form-label" for="filter-sort">
                   Sorteer
                 </label>
                 <slot name="sorter"></slot>
               </div>
-              <div is="vl-column" size="12">
+              <div is="vl-column" size="12" medium-size="12">
                 <slot name="content">${content}</slot>
               </div>
             </div>
           </div>
-          <div id="pager" is="vl-column" size="12">
+          <div id="pager" is="vl-column" size="12" medium-size="12">
             <slot name="pager"></slot>
           </div>
         </div>
@@ -347,8 +347,10 @@ export class VlRichData extends vlElement(HTMLElement) {
   }
 
   __setGridColumnWidth(width) {
-    this.__searchColumn.setAttribute('size', width);
-    this.__contentColumn.setAttribute('size', 12 - width);
+    ['size', 'medium-size'].forEach((size) => {
+      this.__searchColumn.setAttribute(size, width);
+      this.__contentColumn.setAttribute(size, 12 - width);
+    });
   }
 
   __updateNumberOfSearchResults(number) {
