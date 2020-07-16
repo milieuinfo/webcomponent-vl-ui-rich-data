@@ -134,6 +134,38 @@ describe('vl-rich-data', async () => {
     await assert.eventually.isTrue(filter.isDisplayed());
   });
 
+  it('Als gebruiker kan ik de resultaten sorteren', async () => {
+    const richData = await vlRichDataPage.getRichData();
+    const sorter = await richData.getSorter();
+
+    let searchResults = await vlRichDataPage.getSearchResults(richData);
+    let searchResult = await searchResults.getSearchResult(1);
+    let titleSlotElements = await searchResult.titleSlotElements();
+    let title = titleSlotElements[0];
+    await assert.eventually.equal(title.getText(), 'Project #1');
+
+    await sorter.selectByText('Naam manager');
+    searchResults = await vlRichDataPage.getSearchResults(richData);
+    searchResult = await searchResults.getSearchResult(1);
+    titleSlotElements = await searchResult.titleSlotElements();
+    title = titleSlotElements[0];
+    await assert.eventually.equal(title.getText(), 'Project #2');
+
+    await sorter.selectByText('ID');
+  });
+
+  it('Als gebruiker kan ik zien hoeveel zoekresultaten er zijn', async () => {
+    const richData = await vlRichDataPage.getRichData();
+    const searchFilter = await richData.getSearchFilter();
+    const searchFilterName = await vlRichDataPage.getSearchFilterInputFieldByName(searchFilter, 'name');
+
+    await assert.eventually.equal(richData.getNumberOfSearchResults(), 25);
+    await searchFilterName.setValue('20');
+    await assert.eventually.equal(richData.getNumberOfSearchResults(), 1);
+
+    await searchFilterName.clear();
+  });
+
   it('Als gebruiker met een klein scherm, kan ik de filter openen als modal, gebruiken en terug sluiten', async () => {
     await changeWindowWidth(750);
     const richData = await vlRichDataPage.getRichData();
@@ -152,38 +184,6 @@ describe('vl-rich-data', async () => {
     await richData.openModalSearchFilter();
     await searchFilterId.clear();
     await searchFilterName.clear();
-  });
-
-  it('Als gebruiker kan ik zien hoeveel zoekresultaten er zijn', async () => {
-    const richData = await vlRichDataPage.getRichData();
-    const searchFilter = await richData.getSearchFilter();
-    const searchFilterName = await vlRichDataPage.getSearchFilterInputFieldByName(searchFilter, 'name');
-
-    await assert.eventually.equal(richData.getNumberOfSearchResults(), 25);
-    await searchFilterName.setValue('20');
-    await assert.eventually.equal(richData.getNumberOfSearchResults(), 1);
-
-    await searchFilterName.clear();
-  });
-
-  it('Als gebruiker kan ik de resultaten sorteren', async () => {
-    const richData = await vlRichDataPage.getRichData();
-    const sorter = await richData.getSorter();
-
-    let searchResultsContainer = await vlRichDataPage.getSearchResults(richData);
-    let searchResults = await searchResultsContainer.getSearchResults();
-    let titleSlotElements = await searchResults[0].titleSlotElements();
-    let title = titleSlotElements[0];
-    await assert.eventually.equal(title.getText(), 'Project #1');
-
-    await sorter.selectByText('Naam manager');
-    searchResultsContainer = await vlRichDataPage.getSearchResults(richData);
-    searchResults = await searchResultsContainer.getSearchResults();
-    titleSlotElements = await searchResults[0].titleSlotElements();
-    title = titleSlotElements[0];
-    await assert.eventually.equal(title.getText(), 'Project #2');
-
-    await sorter.selectByText('ID');
   });
 
   const changeWindowWidth = async (size) => {
