@@ -3,6 +3,7 @@ const {By} = require('vl-ui-core').Test.Setup;
 const {VlPager} = require('vl-ui-pager').Test;
 const {VlSearchFilter} = require('vl-ui-search-filter').Test;
 const {VlModal} = require('vl-ui-modal').Test;
+const {VlSelect} = require('vl-ui-select').Test;
 
 class VlRichData extends VlElement {
   async getContentSlotElements() {
@@ -14,13 +15,18 @@ class VlRichData extends VlElement {
     return new VlSearchFilter(this.driver, searchFilter);
   }
 
+  async getSorter() {
+    const assignedElements = await this._getSorterSlotElements();
+    return new VlSelect(this.driver, assignedElements[0]);
+  }
+
   async getPager() {
     const assignedElements = await this._getPagerSlotElements();
     return new VlPager(this.driver, assignedElements[0]);
   }
 
   async getNumberOfSearchResults() {
-    const element = await this._getSearchResultsElement();
+    const element = await this._getSearchResultsNumberElement();
     return element.getText();
   }
 
@@ -45,6 +51,10 @@ class VlRichData extends VlElement {
     return modal.close();
   }
 
+  async _getSorterSlotElements() {
+    return this._getSlotElements('sorter');
+  }
+
   async _getPagerSlotElements() {
     return this._getSlotElements('pager');
   }
@@ -54,7 +64,7 @@ class VlRichData extends VlElement {
     return this.getAssignedElements(slot);
   }
 
-  async _getSearchResultsElement() {
+  async _getSearchResultsNumberElement() {
     return this.shadowRoot.findElement(By.css('#search-results-number'));
   }
 }

@@ -22,6 +22,14 @@
     overflow: hidden;
 }
 
-#search-results {
+#search-results, #sorter {
     line-height: 3em;
+}
+
+#sorter {
+    text-align: right;
+
+    label {
+        margin-right: 10px;
+    }
 }

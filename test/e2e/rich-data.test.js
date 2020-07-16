@@ -166,6 +166,26 @@ describe('vl-rich-data', async () => {
     await searchFilterName.clear();
   });
 
+  it('Als gebruiker kan ik de resultaten sorteren', async () => {
+    const richData = await vlRichDataPage.getRichData();
+    const sorter = await richData.getSorter();
+
+    let searchResultsContainer = await vlRichDataPage.getSearchResults(richData);
+    let searchResults = await searchResultsContainer.getSearchResults();
+    let titleSlotElements = await searchResults[0].titleSlotElements();
+    let title = titleSlotElements[0];
+    await assert.eventually.equal(title.getText(), 'Project #1');
+
+    await sorter.selectByText('Naam manager');
+    searchResultsContainer = await vlRichDataPage.getSearchResults(richData);
+    searchResults = await searchResultsContainer.getSearchResults();
+    titleSlotElements = await searchResults[0].titleSlotElements();
+    title = titleSlotElements[0];
+    await assert.eventually.equal(title.getText(), 'Project #2');
+
+    await sorter.selectByText('ID');
+  });
+
   const changeWindowWidth = async (size) => {
     const rect = await driver.manage().window().getRect();
     originalWindowWidth = rect.width;

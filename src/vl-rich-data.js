@@ -1,5 +1,6 @@
 import {vlElement, define} from '/node_modules/vl-ui-core/dist/vl-core.js';
 import '/node_modules/vl-ui-grid/dist/vl-grid.js';
+import '/node_modules/vl-ui-form-message/dist/vl-form-message.js';
 import '/node_modules/vl-ui-icon/dist/vl-icon.js';
 import '/node_modules/vl-ui-button/dist/vl-button.js';
 import '/node_modules/vl-ui-modal/dist/vl-modal.js';
@@ -36,6 +37,7 @@ export class VlRichData extends vlElement(HTMLElement) {
       <style>
         @import "/src/style.css";
         @import "/node_modules/vl-ui-grid/dist/style.css";
+        @import "/node_modules/vl-ui-form-message/dist/style.css";
         @import "/node_modules/vl-ui-icon/dist/style.css";
         @import "/node_modules/vl-ui-button/dist/style.css";
       </style>
@@ -66,6 +68,12 @@ export class VlRichData extends vlElement(HTMLElement) {
               <div id="search-results" is="vl-column" size="8" small-size="6">
                 <span>We vonden</span>
                 <strong><span id="search-results-number">0</span> resultaten</strong>
+              </div>
+              <div id="sorter" is="vl-column" size="4" small-size="6">
+                <label is="vl-form-label" for="filter-sort">
+                  Sorteer
+                </label>
+                <slot name="sorter"></slot>
               </div>
               <div is="vl-column" size="12">
                 <slot name="content">${content}</slot>
