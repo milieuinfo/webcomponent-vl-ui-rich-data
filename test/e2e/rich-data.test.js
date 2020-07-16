@@ -3,9 +3,18 @@ const VlRichDataPage = require('./pages/vl-rich-data.page');
 
 describe('vl-rich-data', async () => {
   const vlRichDataPage = new VlRichDataPage(driver);
+  let originalWindowWidth;
 
   before(() => {
     return vlRichDataPage.load();
+  });
+
+  afterEach(async () => {
+    if (originalWindowWidth != null) {
+      const rect = await driver.manage().window().getRect();
+      await driver.manage().window().setRect({height: rect.height, width: originalWindowWidth});
+      originalWindowWidth = null;
+    }
   });
 
   it('Als gebruiker kan ik de content filteren', async () => {
