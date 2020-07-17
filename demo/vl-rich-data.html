@@ -197,32 +197,35 @@
                 'medewerkers': [{'firstName': 'Pieter', 'lastName': 'Beckers'}],
               }],
             };
-            let newData = data.data;
+            let newData = undefined;
 
             const setContentData = (data, from, to) => {
-              content.innerHTML = ``;
-              data.slice(from, to).forEach((project) => {
-                const now = new Date().toLocaleString();
-                const manager = project.manager;
-                const medewerker = project.medewerkers[0];
-                const html = `
-                  <vl-search-result>
-                    <a href="#" slot="title">${project.name}</a>
-                    <time slot="sub-title">Gestart op ${now}</time>
-                    <dl slot="content">
-                      <dt>ID</dt>
-                      <dd>${project.id}</dd>
-                      <dt>Naam manager</dt>
-                      <dd>${manager.lastName}</dd>
-                      <dt>Eerste medewerker</dt>
-                      <dd>${medewerker.lastName}</dd>
-                      <dt>Project o.l.v. <b>manager</b></dt>
-                      <dd>${project.name} o.l.v. <b>${manager.firstName} ${manager.lastName}</b></dd>
-                    </dl>
-                  </vl-search-result>
-                `;
-                content.insertAdjacentHTML('beforeend', html);
-              });
+              if (JSON.stringify(newData) != JSON.stringify(data)) {
+                newData = data;
+                content.innerHTML = ``;
+                data.slice(from, to).forEach((project) => {
+                  const now = new Date().toLocaleString();
+                  const manager = project.manager;
+                  const medewerker = project.medewerkers[0];
+                  const html = `
+                    <vl-search-result>
+                      <a href="#" slot="title">${project.name}</a>
+                      <time slot="sub-title">Gestart op ${now}</time>
+                      <dl slot="content">
+                        <dt>ID</dt>
+                        <dd>${project.id}</dd>
+                        <dt>Naam manager</dt>
+                        <dd>${manager.lastName}</dd>
+                        <dt>Eerste medewerker</dt>
+                        <dd>${medewerker.lastName}</dd>
+                        <dt>Project o.l.v. <b>manager</b></dt>
+                        <dd>${project.name} o.l.v. <b>${manager.firstName} ${manager.lastName}</b></dd>
+                      </dl>
+                    </vl-search-result>
+                  `;
+                  content.insertAdjacentHTML('beforeend', html);
+                });
+              }
             };
 
             const filter = (data, pathToKey, value) => {
@@ -250,7 +253,7 @@
             };
 
             element.addEventListener('change', (event) => {
-              newData = data.data;
+              let newData = data.data;
               let totalItems = data.data.length;
 
               let filterEntries = undefined;

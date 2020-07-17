@@ -5,7 +5,7 @@ describe('vl-rich-data', async () => {
   const vlRichDataPage = new VlRichDataPage(driver);
   let originalWindowWidth;
 
-  beforeEach(() => {
+  before(() => {
     return vlRichDataPage.load();
   });
 
