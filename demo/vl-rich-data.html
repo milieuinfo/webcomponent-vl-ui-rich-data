@@ -284,8 +284,9 @@
             });
 
             sorter.addEventListener('change', (event) => {
+              const data = [...newData];
               event.stopPropagation();
-              newData.sort((firstElement, secondElement) => {
+              data.sort((firstElement, secondElement) => {
                 const keys = event.target.value.split('.');
                 firstValue = (keys.reduce((value, key) => value[key], firstElement)).toString();
                 secondValue = (keys.reduce((value, key) => value[key], secondElement)).toString();
@@ -294,10 +295,10 @@
               element.data = {
                 paging: {
                   currentPage: 0,
-                  totalItems: newData.length,
+                  totalItems: data.length,
                 },
               };
-              setContentData(newData, 0, 10);
+              setContentData(data, 0, 10);
             });
 
             // initial data
