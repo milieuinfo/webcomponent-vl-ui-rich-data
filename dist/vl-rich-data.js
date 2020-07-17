@@ -319,8 +319,11 @@ export class VlRichData extends vlElement(HTMLElement) {
   }
 
   __observeSearchFilter() {
-    const observer = new MutationObserver(() => {
-      this.__processSearchFilter();
+    const observer = new MutationObserver((mutations) => {
+      mutations = mutations.filter((mutation) => mutation.target && mutation.target.slot != 'content');
+      if (mutations && mutations.length > 0) {
+        this.__processSearchFilter();
+      }
     });
     observer.observe(this, {childList: true, subtree: true});
     return observer;
@@ -357,9 +360,11 @@ export class VlRichData extends vlElement(HTMLElement) {
     if (number) {
       this.__numberOfSearchResultsElement.textContent = number;
     } else {
-      customElements.whenDefined('vl-pager').then(() => {
-        this.__numberOfSearchResultsElement.textContent = this.__pager.totalItems;
-      });
+      if (this.__pager) {
+        customElements.whenDefined('vl-pager').then(() => {
+          this.__numberOfSearchResultsElement.textContent = this.__pager.totalItems || 0;
+        });
+      }
     }
   }
 
