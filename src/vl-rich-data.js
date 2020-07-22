@@ -333,9 +333,11 @@ export class VlRichData extends vlElement(HTMLElement) {
     if (this.__searchFilter) {
       this.__searchFilter.setAttribute('alt', '');
       this.__showSearchColumn();
+      this.__showSearchResults();
       this.__addSearchFilterEventListeners();
     } else {
       this.__hideSearchColumn();
+      this.__hideSearchResults();
     }
   }
 
@@ -344,9 +346,17 @@ export class VlRichData extends vlElement(HTMLElement) {
     this.__setGridColumnWidth(0);
   }
 
+  __hideSearchResults() {
+    this.__searchResultsElement.hidden = true;
+  }
+
   __showSearchColumn() {
     this.__searchColumn.hidden = false;
     this.__setGridColumnWidth(VlRichData._defaultSearchColumnSize);
+  }
+
+  __showSearchResults() {
+    this.__searchResultsElement.hidden = false;
   }
 
   __setGridColumnWidth(width) {
