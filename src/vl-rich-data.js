@@ -89,6 +89,7 @@ export class VlRichData extends vlElement(HTMLElement) {
     `);
 
     this.__processSearchFilter();
+    this.__processSorter();
 
     this.__observePager();
     this.__observeFilterButtons();
@@ -169,8 +170,12 @@ export class VlRichData extends vlElement(HTMLElement) {
     return this.__searchResultsElement.querySelector('#search-results-number');
   }
 
-  get __sorterElement() {
+  get __sorterContainer() {
     return this.shadowRoot.querySelector('#sorter');
+  }
+
+  get __sorter() {
+    return this.querySelector('[slot="sorter"]');
   }
 
   get __pager() {
@@ -338,11 +343,17 @@ export class VlRichData extends vlElement(HTMLElement) {
       this.__searchFilter.setAttribute('alt', '');
       this.__showSearchColumn();
       this.__showSearchResults();
-      this.__showSorter();
       this.__addSearchFilterEventListeners();
     } else {
       this.__hideSearchColumn();
       this.__hideSearchResults();
+    }
+  }
+
+  __processSorter() {
+    if (this.__sorter) {
+      this.__showSorter();
+    } else {
       this.__hideSorter();
     }
   }
@@ -357,7 +368,7 @@ export class VlRichData extends vlElement(HTMLElement) {
   }
 
   __hideSorter() {
-    this.__sorterElement.hidden = true;
+    this.__sorterContainer.hidden = true;
   }
 
   __showSearchColumn() {
@@ -370,7 +381,7 @@ export class VlRichData extends vlElement(HTMLElement) {
   }
 
   __showSorter() {
-    this.__sorterElement.hidden = false;
+    this.__sorterContainer.hidden = false;
   }
 
   __setGridColumnWidth(width) {
