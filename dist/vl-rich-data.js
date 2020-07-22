@@ -338,12 +338,12 @@ export class VlRichData extends vlElement(HTMLElement) {
       this.__searchFilter.setAttribute('alt', '');
       this.__showSearchColumn();
       this.__showSearchResults();
-      this.__showSorterResults();
+      this.__showSorter();
       this.__addSearchFilterEventListeners();
     } else {
       this.__hideSearchColumn();
       this.__hideSearchResults();
-      this.__hideSorterResults();
+      this.__hideSorter();
     }
   }
 
@@ -369,7 +369,7 @@ export class VlRichData extends vlElement(HTMLElement) {
     this.__searchResultsElement.hidden = false;
   }
 
-  __showSorterElement() {
+  __showSorter() {
     this.__sorterElement.hidden = false;
   }
 
