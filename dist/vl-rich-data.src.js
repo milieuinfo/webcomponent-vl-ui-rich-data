@@ -71,8 +71,7 @@ export class VlRichData extends vlElement(HTMLElement) {
           <div id="content" is="vl-column" size="12" medium-size="12" small-size="12" extra-small-size="12">
             <div is="vl-grid" is-stacked>
               <div id="search-results" is="vl-column" size="6" medium-size="6" small-size="6" extra-small-size="6">
-                <span>We vonden</span>
-                <strong><span id="search-results-number">0</span> resultaten</strong>
+                <span>We vonden</span> <strong><span id="search-results-number">0</span> resultaten</strong>
               </div>
               <div id="sorter" is="vl-column" size="6" medium-size="6" small-size="6" extra-small-size="6">
                 <label is="vl-form-label" for="filter-sort">
@@ -167,12 +166,12 @@ export class VlRichData extends vlElement(HTMLElement) {
     return this.shadowRoot.querySelector('#toggle-filter-button');
   }
 
-  get __searchResultsElement() {
+  get __searchResults() {
     return this.shadowRoot.querySelector('#search-results');
   }
 
-  get __numberOfSearchResultsElement() {
-    return this.__searchResultsElement.querySelector('#search-results-number');
+  get __numberOfSearchResults() {
+    return this.__searchResults.querySelector('#search-results-number');
   }
 
   get __sorterContainer() {
@@ -369,7 +368,7 @@ export class VlRichData extends vlElement(HTMLElement) {
   }
 
   __hideSearchResults() {
-    this.__searchResultsElement.hidden = true;
+    this.__searchResults.hidden = true;
   }
 
   __hideSorter() {
@@ -382,7 +381,7 @@ export class VlRichData extends vlElement(HTMLElement) {
   }
 
   __showSearchResults() {
-    this.__searchResultsElement.hidden = false;
+    this.__searchResults.hidden = false;
   }
 
   __showSorter() {
@@ -398,11 +397,11 @@ export class VlRichData extends vlElement(HTMLElement) {
 
   __updateNumberOfSearchResults(number) {
     if (number) {
-      this.__numberOfSearchResultsElement.textContent = number;
+      this.__numberOfSearchResults.textContent = number;
     } else {
       if (this.__pager) {
         customElements.whenDefined('vl-pager').then(() => {
-          this.__numberOfSearchResultsElement.textContent = this.__pager.totalItems || 0;
+          this.__numberOfSearchResults.textContent = this.__pager.totalItems || 0;
         });
       }
     }
