@@ -91,16 +91,28 @@
       const should = chai.should();
       const sandbox = sinon.sandbox.create();
 
-      test('wanneer geen filterslot bestaat, zal er geen search filter aanwezig zijn', () => {
+      test('wanneer geen filterslot bestaat, zal er geen search filter en search results element aanwezig zijn', () => {
         const element = fixture('vl-rich-data-zonder-filter-fixture');
         should.not.exist(element.__searchFilter);
+        should.exist(element.__searchColumn);
+        should.exist(element.__searchResults);
+        should.exist(element.__numberOfSearchResults);
+        assert.isTrue(element.__searchColumn.hidden);
+        assert.isTrue(element.__searchResults.hidden);
       });
 
-      test('wanneer wel een filterslot bestaat, zal de search filter aanwezig zijn met alt variant', () => {
+      test('wanneer wel een filterslot bestaat, zal de search filter met alt variant en het search results element aanwezig zijn', () => {
         const element = fixture('vl-rich-data-met-filter-fixture');
         const searchFilter = element.__searchFilter;
         should.exist(searchFilter);
         assert.isTrue(searchFilter.hasAttribute('alt'));
+
+        should.exist(element.__searchColumn);
+        assert.isFalse(element.__searchColumn.hidden);
+
+        should.exist(element.__searchResults);
+        should.exist(element.__numberOfSearchResults);
+        assert.isFalse(element.__searchResults.hidden);
       });
 
       test('als er aan een input van de search filter iets wijzigt wordt er een event zonder sortering maar met formdata en paginatie gestuurd', (done) => {

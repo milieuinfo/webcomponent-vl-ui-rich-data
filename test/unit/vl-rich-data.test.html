@@ -87,20 +87,20 @@
         };
 
         element.data = value;
-        should.exist(element.__searchResultsElement);
-        should.exist(element.__numberOfSearchResultsElement);
-        assert.equal(element.__searchResultsElement.innerText, `We vonden ${value.paging.totalItems} resultaten`);
-        assert.equal(element.__numberOfSearchResultsElement.innerText, value.paging.totalItems);
+        should.exist(element.__searchResults);
+        should.exist(element.__numberOfSearchResults);
+        assert.equal(element.__searchResults.innerText.trim(), `We vonden ${value.paging.totalItems} resultaten`);
+        assert.equal(element.__numberOfSearchResults.innerText, value.paging.totalItems);
       });
 
       test('initieel zal het total items van de vl-pager opgevraagd worden op het aantal zoekresultaten te visualiseren', (done) => {
         const element = fixture('vl-rich-data-pager-fixture');
         const count = element.__pager.totalItems;
         customElements.whenDefined('vl-pager').then(() => {
-          should.exist(element.__searchResultsElement);
-          should.exist(element.__numberOfSearchResultsElement);
-          assert.equal(element.__searchResultsElement.innerText, `We vonden ${count} resultaten`);
-          assert.equal(element.__numberOfSearchResultsElement.innerText, count);
+          should.exist(element.__searchResults);
+          should.exist(element.__numberOfSearchResults);
+          assert.equal(element.__searchResults.innerText.trim(), `We vonden ${count} resultaten`);
+          assert.equal(element.__numberOfSearchResults.innerText, count);
           done();
         });
       });
@@ -110,10 +110,10 @@
         const pager = element.__pager;
         pager.setAttribute('total-items', '');
         customElements.whenDefined('vl-pager').then(() => {
-          should.exist(element.__searchResultsElement);
-          should.exist(element.__numberOfSearchResultsElement);
-          assert.equal(element.__searchResultsElement.innerText, `We vonden 0 resultaten`);
-          assert.equal(element.__numberOfSearchResultsElement.innerText, '0');
+          should.exist(element.__searchResults);
+          should.exist(element.__numberOfSearchResults);
+          assert.equal(element.__searchResults.innerText.trim(), `We vonden 0 resultaten`);
+          assert.equal(element.__numberOfSearchResults.innerText, '0');
           done();
         });
       });

@@ -66,8 +66,7 @@ export class VlRichData extends vlElement(HTMLElement) {
           <div id="content" is="vl-column" size="12" medium-size="12" small-size="12" extra-small-size="12">
             <div is="vl-grid" is-stacked>
               <div id="search-results" is="vl-column" size="6" medium-size="6" small-size="6" extra-small-size="6">
-                <span>We vonden</span>
-                <strong><span id="search-results-number">0</span> resultaten</strong>
+                <span>We vonden</span> <strong><span id="search-results-number">0</span> resultaten</strong>
               </div>
               <div id="sorter" is="vl-column" size="6" medium-size="6" small-size="6" extra-small-size="6">
                 <label is="vl-form-label" for="filter-sort">
@@ -89,6 +88,7 @@ export class VlRichData extends vlElement(HTMLElement) {
     `);
 
     this.__processSearchFilter();
+    this.__processSorter();
 
     this.__observePager();
     this.__observeFilterButtons();
@@ -161,12 +161,20 @@ export class VlRichData extends vlElement(HTMLElement) {
     return this.shadowRoot.querySelector('#toggle-filter-button');
   }
 
-  get __searchResultsElement() {
+  get __searchResults() {
     return this.shadowRoot.querySelector('#search-results');
   }
 
-  get __numberOfSearchResultsElement() {
-    return this.__searchResultsElement.querySelector('#search-results-number');
+  get __numberOfSearchResults() {
+    return this.__searchResults.querySelector('#search-results-number');
+  }
+
+  get __sorterContainer() {
+    return this.shadowRoot.querySelector('#sorter');
+  }
+
+  get __sorter() {
+    return this.querySelector('[slot="sorter"]');
   }
 
   get __pager() {
@@ -333,9 +341,19 @@ export class VlRichData extends vlElement(HTMLElement) {
     if (this.__searchFilter) {
       this.__searchFilter.setAttribute('alt', '');
       this.__showSearchColumn();
+      this.__showSearchResults();
       this.__addSearchFilterEventListeners();
     } else {
       this.__hideSearchColumn();
+      this.__hideSearchResults();
+    }
+  }
+
+  __processSorter() {
+    if (this.__sorter) {
+      this.__showSorter();
+    } else {
+      this.__hideSorter();
     }
   }
 
@@ -344,9 +362,25 @@ export class VlRichData extends vlElement(HTMLElement) {
     this.__setGridColumnWidth(0);
   }
 
+  __hideSearchResults() {
+    this.__searchResults.hidden = true;
+  }
+
+  __hideSorter() {
+    this.__sorterContainer.hidden = true;
+  }
+
   __showSearchColumn() {
     this.__searchColumn.hidden = false;
     this.__setGridColumnWidth(VlRichData._defaultSearchColumnSize);
+  }
+
+  __showSearchResults() {
+    this.__searchResults.hidden = false;
+  }
+
+  __showSorter() {
+    this.__sorterContainer.hidden = false;
   }
 
   __setGridColumnWidth(width) {
@@ -358,11 +392,11 @@ export class VlRichData extends vlElement(HTMLElement) {
 
   __updateNumberOfSearchResults(number) {
     if (number) {
-      this.__numberOfSearchResultsElement.textContent = number;
+      this.__numberOfSearchResults.textContent = number;
     } else {
       if (this.__pager) {
         customElements.whenDefined('vl-pager').then(() => {
-          this.__numberOfSearchResultsElement.textContent = this.__pager.totalItems || 0;
+          this.__numberOfSearchResults.textContent = this.__pager.totalItems || 0;
         });
       }
     }
