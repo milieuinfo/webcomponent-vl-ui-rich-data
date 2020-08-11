@@ -12,6 +12,7 @@ import '/node_modules/vl-ui-pager/dist/vl-pager.js';
  * @classdesc
  *
  * @extends HTMLElement
+ * @mixes vlElement
  *
  * @property {boolean} data-vl-filter-closable - Attribuut dat de filter sluitbaar maakt en een knop getoond wordt om de filter te tonen en terug te verbergen. Op een klein scherm wordt een modal geopend bij het klikken op de filter knop ipv een de filter naast de tabel te tonen. Om elementen van de filter te verbergen enkel in de modal, kan het attribuut data-vl-hidden-in-modal gezet worden.
  * @property {boolean} data-vl-filter-closed - Attribuut dat aangeeft of dat de filter gesloten is.
