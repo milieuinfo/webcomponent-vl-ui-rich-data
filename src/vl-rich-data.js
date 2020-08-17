@@ -84,7 +84,7 @@ export class VlRichData extends vlElement(HTMLElement) {
             <slot name="pager"></slot>
           </div>
         </div>
-        <vl-modal id="filter-modal" closable not-cancellable></vl-modal>
+        <vl-modal id="filter-modal" data-vl-closable data-vl-not-cancellable></vl-modal>
       </div>
     `);
 
