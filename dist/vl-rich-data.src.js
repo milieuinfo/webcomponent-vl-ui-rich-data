@@ -89,7 +89,7 @@ export class VlRichData extends vlElement(HTMLElement) {
             <slot name="pager"></slot>
           </div>
         </div>
-        <vl-modal id="filter-modal" closable not-cancellable></vl-modal>
+        <vl-modal id="filter-modal" data-vl-closable data-vl-not-cancellable></vl-modal>
       </div>
     `);
 
@@ -226,13 +226,13 @@ export class VlRichData extends vlElement(HTMLElement) {
   set _paging(paging) {
     if (paging) {
       if (paging.currentPage != null) {
-        this.__pager.setAttribute('current-page', paging.currentPage);
+        this.__pager.setAttribute('data-vl-current-page', paging.currentPage);
       }
       if (paging.itemsPerPage != null) {
-        this.__pager.setAttribute('items-per-page', paging.itemsPerPage);
+        this.__pager.setAttribute('data-vl-items-per-page', paging.itemsPerPage);
       }
       if (paging.totalItems != null) {
-        this.__pager.setAttribute('total-items', paging.totalItems);
+        this.__pager.setAttribute('data-vl-total-items', paging.totalItems);
         this.__updateNumberOfSearchResults(paging.totalItems);
       }
     }
@@ -325,7 +325,7 @@ export class VlRichData extends vlElement(HTMLElement) {
 
   __observePager() {
     if (this.__pager) {
-      this.__pager.setAttribute('align-right', true);
+      this.__pager.setAttribute('data-vl-align-right', true);
       this.__pager.addEventListener('change', (e) => {
         this.__onStateChange(e, {paging: true});
       });
