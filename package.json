@@ -1,6 +1,6 @@
 {
 	"name": "vl-ui-rich-data",
-	"version": "1.0.1",
+	"version": "1.0.2",
 	"description": "Een dynamische lijst van data die uitgebreid kan worden met functionaliteiten die het consumeren van de data door een gebruiker kunnen verbeteren",
 	"author": "DIDM",
 	"license": "MIT",
