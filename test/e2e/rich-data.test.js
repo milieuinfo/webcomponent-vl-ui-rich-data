@@ -1,11 +1,14 @@
-const {assert, driver} = require('vl-ui-core').Test.Setup;
+const {assert, getDriver} = require('vl-ui-core').Test.Setup;
 const VlRichDataPage = require('./pages/vl-rich-data.page');
 
 describe('vl-rich-data', async () => {
-  const vlRichDataPage = new VlRichDataPage(driver);
+  let driver;
+  let vlRichDataPage;
   let originalWindowWidth;
 
   before(() => {
+    driver = getDriver();
+    vlRichDataPage = new VlRichDataPage(driver);
     return vlRichDataPage.load();
   });
 
@@ -17,7 +20,7 @@ describe('vl-rich-data', async () => {
     }
   });
 
-  it('Als gebruiker kan ik de content filteren', async () => {
+  it('als gebruiker kan ik de content filteren', async () => {
     const richData = await vlRichDataPage.getRichData();
     const searchFilter = await richData.getSearchFilter();
     const searchFilterId = await vlRichDataPage.getSearchFilterInputFieldByName(searchFilter, 'id');
@@ -43,7 +46,7 @@ describe('vl-rich-data', async () => {
     await assert.eventually.lengthOf(searchResults.getSearchResults(), 10);
   });
 
-  it('Als gebruiker zal ik altijd naar de eerste pagina doorverwezen worden bij het filteren en kan ik indien mogelijk pagineren binnen de zoekresultaten', async () => {
+  it('als gebruiker zal ik altijd naar de eerste pagina doorverwezen worden bij het filteren en kan ik indien mogelijk pagineren binnen de zoekresultaten', async () => {
     const richData = await vlRichDataPage.getRichData();
     const searchFilter = await richData.getSearchFilter();
     const searchFilterManagerLastName = await vlRichDataPage.getSearchFilterInputFieldByName(searchFilter, 'manager.lastName');
@@ -69,7 +72,7 @@ describe('vl-rich-data', async () => {
     await searchFilterManagerLastName.clear();
   });
 
-  it('Als gebruiker zal ik de originele lijst te zien krijgen wanneer ik een filter verwijder', async () => {
+  it('als gebruiker zal ik de originele lijst te zien krijgen wanneer ik een filter verwijder', async () => {
     const richData = await vlRichDataPage.getRichData();
     const searchFilter = await richData.getSearchFilter();
     const searchFilterManagerLastName = await vlRichDataPage.getSearchFilterInputFieldByName(searchFilter, 'manager.lastName');
@@ -100,7 +103,7 @@ describe('vl-rich-data', async () => {
     await assert.eventually.equal(pager.getTotalItems(), 25);
   });
 
-  it('Als gebruiker zal ik de originele lijst te zien krijgen wanneer ik de volledige zoekopdracht verwijder', async () => {
+  it('als gebruiker zal ik de originele lijst te zien krijgen wanneer ik de volledige zoekopdracht verwijder', async () => {
     const richData = await vlRichDataPage.getRichData();
     const searchFilter = await richData.getSearchFilter();
     const searchFilterId = await vlRichDataPage.getSearchFilterInputFieldByName(searchFilter, 'id');
@@ -119,7 +122,7 @@ describe('vl-rich-data', async () => {
     await searchFilterName.clear();
   });
 
-  it('Als gebruiker kan ik de filter sluiten met de sluit knop en terug openen met de filter knop', async () => {
+  it('als gebruiker kan ik de filter sluiten met de sluit knop en terug openen met de filter knop', async () => {
     const richData = await vlRichDataPage.getRichData();
     const filter = await richData.getSearchFilter();
     await assert.eventually.isTrue(filter.isDisplayed());
@@ -131,7 +134,7 @@ describe('vl-rich-data', async () => {
     await assert.eventually.isTrue(filter.isDisplayed());
   });
 
-  it('Als gebruiker kan ik de filter sluiten en terug openen met de filter knop', async () => {
+  it('als gebruiker kan ik de filter sluiten en terug openen met de filter knop', async () => {
     const richData = await vlRichDataPage.getRichData();
     const filter = await richData.getSearchFilter();
     await assert.eventually.isTrue(filter.isDisplayed());
@@ -143,7 +146,7 @@ describe('vl-rich-data', async () => {
     await assert.eventually.isTrue(filter.isDisplayed());
   });
 
-  it('Als gebruiker kan ik de resultaten sorteren', async () => {
+  it('als gebruiker kan ik de resultaten sorteren', async () => {
     const richData = await vlRichDataPage.getRichData();
     const sorter = await richData.getSorter();
 
@@ -163,7 +166,7 @@ describe('vl-rich-data', async () => {
     await sorter.selectByText('ID');
   });
 
-  it('Als gebruiker kan ik zien hoeveel zoekresultaten er zijn', async () => {
+  it('als gebruiker kan ik zien hoeveel zoekresultaten er zijn', async () => {
     const richData = await vlRichDataPage.getRichData();
     const searchFilter = await richData.getSearchFilter();
     const searchFilterName = await vlRichDataPage.getSearchFilterInputFieldByName(searchFilter, 'name');
@@ -175,7 +178,7 @@ describe('vl-rich-data', async () => {
     await searchFilterName.clear();
   });
 
-  it('Als gebruiker met een klein scherm, kan ik de filter openen als modal, gebruiken en terug sluiten', async () => {
+  it('als gebruiker met een klein scherm, kan ik de filter openen als modal, gebruiken en terug sluiten', async () => {
     await changeWindowWidth(750);
     const richData = await vlRichDataPage.getRichData();
     const searchFilter = await richData.getSearchFilter();
