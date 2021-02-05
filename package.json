@@ -37,13 +37,13 @@
 		"demo": "http-server"
 	},
 	"dependencies": {
-		"vl-ui-button": "^5.0.9",
+		"vl-ui-button": "^5.0.10",
 		"vl-ui-core": "^7.1.1",
-		"vl-ui-form-message": "^5.0.6",
-		"vl-ui-grid": "^3.2.0",
-		"vl-ui-icon": "^5.2.1",
-		"vl-ui-modal": "^4.0.3",
-		"vl-ui-pager": "^3.0.10"
+		"vl-ui-form-message": "^5.0.7",
+		"vl-ui-grid": "^3.2.1",
+		"vl-ui-icon": "^5.2.2",
+		"vl-ui-modal": "^4.0.4",
+		"vl-ui-pager": "^3.0.11"
 	},
 	"peerDependencies": {
 		"vl-ui-button": "^5.0.9",
