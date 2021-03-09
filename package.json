@@ -62,6 +62,6 @@
 		"vl-ui-search-filter": "^3.1.6",
 		"vl-ui-search-results": "^1.0.3",
 		"vl-ui-select": "^4.2.0",
-		"vl-ui-util": "^5.3.7"
+		"vl-ui-util": "^5.3.10"
 	}
 }
