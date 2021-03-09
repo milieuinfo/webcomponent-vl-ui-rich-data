@@ -15,7 +15,7 @@
 
 .vl-filter__close {
     position: absolute;
-    top: 1.5rem;
+    top: 8px;
     right: 0;
     padding: 3px 0px 0px 0px;
     border: 0;
@@ -23,7 +23,7 @@
 }
 
 #search-results, #sorter {
-    line-height: 3em;
+    line-height: 2em;
 }
 
 #sorter {
@@ -32,4 +32,8 @@
     label {
         margin-right: 10px;
     }
+}
+
+#filter-slot-container {
+    margin-top: 8px;
 }
