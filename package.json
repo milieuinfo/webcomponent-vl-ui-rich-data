@@ -57,7 +57,7 @@
 		"@govflanders/vl-ui-util": "^3.12.17",
 		"vl-ui-body": "^1.0.8",
 		"vl-ui-input-field": "^3.2.8",
-		"vl-ui-search-filter": "github:milieuinfo/webcomponent-vl-ui-search-filter#upgrade",
+		"vl-ui-search-filter": "^3.2.0",
 		"vl-ui-search-results": "^1.0.4",
 		"vl-ui-select": "^4.2.1",
 		"vl-ui-util": "^5.3.10"
