@@ -41,6 +41,7 @@ class VlRichData extends VlElement {
 
   async openModalSearchFilter() {
     const button = await this.shadowRoot.findElement(By.css('#open-filter-button'));
+    await button.scrollIntoView();
     return button.click();
   }
 
