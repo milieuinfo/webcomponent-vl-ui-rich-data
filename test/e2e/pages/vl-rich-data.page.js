@@ -18,6 +18,11 @@ class VlRichDataPage extends Page {
     await button.click();
   }
 
+  async submitSearchFilter(searchFilter) {
+    const button = await searchFilter.findElement(By.css('button[type="button"]'));
+    await button.click();
+  }
+
   async getSearchResults(richData) {
     const slotElements = await richData.getContentSlotElements();
     return new VlSearchResults(this.driver, slotElements[0]);
