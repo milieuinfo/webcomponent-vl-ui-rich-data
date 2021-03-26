@@ -181,11 +181,12 @@ describe('vl-rich-data', async () => {
   it('als gebruiker met een klein scherm, kan ik de filter openen als modal, gebruiken en terug sluiten', async () => {
     await changeWindowWidth(750);
     const richData = await vlRichDataPage.getRichData();
-    const searchFilter = await richData.getSearchFilter();
+    let searchFilter = await richData.getSearchFilter();
     const searchFilterId = await vlRichDataPage.getSearchFilterInputFieldByName(searchFilter, 'id');
     const searchFilterName = await vlRichDataPage.getSearchFilterInputFieldByName(searchFilter, 'name');
 
     await richData.openModalSearchFilter();
+    searchFilter = await richData.getSearchFilter();
     await searchFilterId.setValue('1');
     await searchFilterName.setValue('20');
     await vlRichDataPage.submitSearchFilter(searchFilter);
