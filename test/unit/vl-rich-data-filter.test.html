@@ -18,7 +18,7 @@
 </head>
 
 <body>
-  <test-fixture id="vl-rich-data-zonder-filter-fixture">
+  <test-fixture id="vl-rich-data-fixture">
     <template>
       <vl-rich-data>
         <vl-rich-data-field id="id-field" data-vl-label="ID" data-vl-selector="id"></vl-rich-data-field>
@@ -27,18 +27,16 @@
     </template>
   </test-fixture>
 
-  <test-fixture id="vl-rich-data-met-filter-fixture">
+  <test-fixture id="vl-rich-data-filter-fixture">
     <template>
       <vl-rich-data data-vl-filter-title='title'>
-        <div slot="filter">
-          <div is="vl-search-filter">
-            <form id="form">
-              <label>Hier kunnen filtervelden komen</label>
-              <input is="vl-input-field" type="text" name="filter1"/>
-            </form>
-            <div>
-              <button is="vl-button-link" type="reset" form="form">Zoekopdracht verwijderen</button>
-            </div>
+        <div is="vl-search-filter" slot="filter">
+          <form id="form">
+            <label>Hier kunnen filtervelden komen</label>
+            <input is="vl-input-field" type="text" name="filter1"/>
+          </form>
+          <div>
+            <button is="vl-button-link" type="reset" form="form">Zoekopdracht verwijderen</button>
           </div>
         </div>
         <vl-pager slot="pager" total-items="20" items-per-page="5" current-page="1"></vl-pager>
@@ -46,18 +44,21 @@
     </template>
   </test-fixture>
 
-  <test-fixture id="vl-rich-data-met-closable-filter-fixture">
+  <test-fixture id="vl-rich-data-closable-filter-fixture">
     <template>
       <vl-rich-data data-vl-filter-title='title' data-vl-filter-closable>
-        <div slot="filter">
-          <div is="vl-search-filter">
-            <form id="form">
-              <label>Hier kunnen filtervelden komen</label>
-              <input is="vl-input-field" type="text" name="filter1"/>
-            </form>
-            <div id="hidden-in-modal" data-vl-hidden-in-modal>
-              <button is="vl-button-link" type="reset" form="form">Zoekopdracht verwijderen</button>
+        <div is="vl-search-filter" slot="filter">
+          <form id="form">
+            <label>Hier kunnen filtervelden komen</label>
+            <input is="vl-input-field" type="text" name="filter1"/>
+            <div>
+              <button is="vl-button" type="submit">
+                  Zoeken
+              </button>
             </div>
+          </form>
+          <div id="hidden-in-modal" data-vl-hidden-in-modal>
+            <button is="vl-button-link" type="reset" form="form">Zoekopdracht verwijderen</button>
           </div>
         </div>
         <vl-pager slot="pager" total-items="20" items-per-page="5" current-page="1"></vl-pager>
@@ -65,18 +66,16 @@
     </template>
   </test-fixture>
 
-  <test-fixture id="vl-rich-data-met-andere-teksten">
+  <test-fixture id="vl-rich-data-text-fixture">
     <template>
       <vl-rich-data data-vl-filter-title='title' data-vl-filter-closable>
-        <div slot="filter">
-          <div is="vl-search-filter">
-            <form id="form">
-              <label>Hier kunnen filtervelden komen</label>
-              <input is="vl-input-field" type="text" name="filter1"/>
-            </form>
-            <div>
-              <button is="vl-button-link" type="reset" form="form">Zoekopdracht verwijderen</button>
-            </div>
+        <div is="vl-search-filter" slot="filter">
+          <form id="form">
+            <label>Hier kunnen filtervelden komen</label>
+            <input is="vl-input-field" type="text" name="filter1"/>
+          </form>
+          <div>
+            <button is="vl-button-link" type="reset" form="form">Zoekopdracht verwijderen</button>
           </div>
         </div>
         <vl-pager slot="pager" total-items="20" items-per-page="5" current-page="1"></vl-pager>
@@ -92,7 +91,7 @@
       const sandbox = sinon.sandbox.create();
 
       test('wanneer geen filterslot bestaat, zal er geen search filter en search results element aanwezig zijn', () => {
-        const element = fixture('vl-rich-data-zonder-filter-fixture');
+        const element = fixture('vl-rich-data-fixture');
         should.not.exist(element.__searchFilter);
         should.exist(element.__searchColumn);
         should.exist(element.__searchResults);
@@ -102,10 +101,10 @@
       });
 
       test('wanneer wel een filterslot bestaat, zal de search filter met alt variant en het search results element aanwezig zijn', () => {
-        const element = fixture('vl-rich-data-met-filter-fixture');
+        const element = fixture('vl-rich-data-filter-fixture');
         const searchFilter = element.__searchFilter;
         should.exist(searchFilter);
-        assert.isTrue(searchFilter.hasAttribute('alt'));
+        assert.isTrue(searchFilter.hasAttribute('data-vl-alt'));
 
         should.exist(element.__searchColumn);
         assert.isFalse(element.__searchColumn.hidden);
@@ -116,13 +115,13 @@
       });
 
       test('als er aan een input van de search filter iets wijzigt wordt er een event zonder sortering maar met formdata en paginatie gestuurd', (done) => {
-        const element = fixture('vl-rich-data-met-filter-fixture');
+        const element = fixture('vl-rich-data-filter-fixture');
         const pager = element.querySelector('vl-pager');
 
         element.addEventListener('change', (e) => {
-          expect(e.detail.formData.get('filter1')).to.equal('een beetje input');
-          expect(e.detail.sorting).to.be.undefined;
-          expect(e.detail.paging).to.deep.equal({
+          assert.equal(e.detail.formData.get('filter1'), 'een beetje input');
+          assert.isUndefined(e.detail.sorting);
+          assert.deepEqual(e.detail.paging, {
             currentPage: Number(pager.getAttribute('current-page')),
             totalPages: Number(4),
             itemsPerPage: Number(pager.getAttribute('items-per-page')),
@@ -136,16 +135,16 @@
       });
 
       test('als de filtering gereset wordt, zal er een event zonder formdata en sortering maar met paginatie gestuurd worden', (done) => {
-        const element = fixture('vl-rich-data-met-filter-fixture');
+        const element = fixture('vl-rich-data-filter-fixture');
         const pager = element.querySelector('vl-pager');
         const searchFilter = element.__searchFilter;
         const resetButton = searchFilter.querySelector('button[type="reset"]');
 
         setInputValue(searchFilter.querySelector('input'), 'een beetje input');
         element.addEventListener('change', (e) => {
-          expect(e.detail.formData).to.be.undefined;
-          expect(e.detail.sorting).to.be.undefined;
-          expect(e.detail.paging).to.deep.equal({
+          assert.isUndefined(e.detail.formData);
+          assert.isUndefined(e.detail.sorting);
+          assert.deepEqual(e.detail.paging, {
             currentPage: Number(pager.getAttribute('current-page')),
             totalPages: Number(4),
             itemsPerPage: Number(pager.getAttribute('items-per-page')),
@@ -157,27 +156,27 @@
       });
 
       test('als er geen searchfilter aanwezig is, wordt er geen plaats voor voorzien', () => {
-        const element = fixture('vl-rich-data-zonder-filter-fixture');
+        const element = fixture('vl-rich-data-fixture');
         const content = element.shadowRoot.querySelector('#content');
         const search = element.shadowRoot.querySelector('#search');
         ['size', 'medium-size'].forEach((size) => {
-          expect(content.getAttribute(size)).to.be.equal('12');
-          expect(search.getAttribute(size)).to.be.equal('0');
+          assert.equal(content.getAttribute(size), '12');
+          assert.equal(search.getAttribute(size), '0');
         });
       });
 
       test('als er een searchfilter aanwezig is, wordt er plaats voor voorzien', () => {
-        const element = fixture('vl-rich-data-met-filter-fixture');
+        const element = fixture('vl-rich-data-filter-fixture');
         const content = element.shadowRoot.querySelector('#content');
         const search = element.shadowRoot.querySelector('#search');
         ['size', 'medium-size'].forEach((size) => {
-          expect(content.getAttribute(size)).to.be.equal('8');
-          expect(search.getAttribute(size)).to.be.equal('4');
+          assert.equal(content.getAttribute(size), '8');
+          assert.equal(search.getAttribute(size), '4');
         });
       });
 
       test('als er een searchfilter wordt toegevoegd, wordt er plaats voor voorzien', (done) => {
-        const element = fixture('vl-rich-data-zonder-filter-fixture');
+        const element = fixture('vl-rich-data-fixture');
 
         const filter = document.createElement('div');
         filter.setAttribute('slot', 'filter');
@@ -198,30 +197,30 @@
           const content = element.shadowRoot.querySelector('#content');
           const search = element.shadowRoot.querySelector('#search');
           ['size', 'medium-size'].forEach((size) => {
-            expect(content.getAttribute(size)).to.be.equal('8');
-            expect(search.getAttribute(size)).to.be.equal('4');
+            assert.equal(content.getAttribute(`data-vl-${size}`), '8');
+            assert.equal(search.getAttribute(`data-vl-${size}`), '4');
           });
           done();
         });
       });
 
       test('als de searchfilter leeg gemaakt wordt, neemt de content terug de volledige breedte in', (done) => {
-        const element = fixture('vl-rich-data-met-filter-fixture');
+        const element = fixture('vl-rich-data-filter-fixture');
         const filterSlot = element.querySelector('[slot=filter]');
-        filterSlot.innerHTML = '';
+        filterSlot.remove();
         setTimeout(() => {
           const content = element.shadowRoot.querySelector('#content');
           const search = element.shadowRoot.querySelector('#search');
           ['size', 'medium-size'].forEach((size) => {
-            expect(content.getAttribute(size)).to.be.equal('12');
-            expect(search.getAttribute(size)).to.be.equal('0');
+            assert.equal(content.getAttribute(`data-vl-${size}`), '12');
+            assert.equal(search.getAttribute(`data-vl-${size}`), '0');
           });
           done();
         });
       });
 
       test('de filtering van een tabel kan gezet worden via de data setter', () => {
-        const element = fixture('vl-rich-data-met-filter-fixture');
+        const element = fixture('vl-rich-data-filter-fixture');
         const value = {
           data: [{foo: 'bar'}],
           filter: [{
@@ -234,25 +233,25 @@
         element.data = value;
         assert.equal(element.data.filter, value.filter);
         const searchFilter = element.__searchFilter;
-        expect(searchFilter.formData.get('filter1')).to.equal('foobar');
-        expect(searchFilter.querySelector('input').value).to.equal('foobar');
+        assert.equal(searchFilter.formData.get('filter1'), 'foobar');
+        assert.equal(searchFilter.querySelector('input').value, 'foobar');
       });
 
       test('als het data-vl-filter-closable attribuut wordt gezet, worden de sluit knop, open knop en filter container met filter knop getoond', () => {
-        const element = fixture('vl-rich-data-met-filter-fixture');
-        expect(element.__filterToggleContainer.hidden).to.be.true;
-        expect(element.__filterCloseButton.hidden).to.be.true;
-        expect(element.__filterOpenContainer.hidden).to.be.true;
+        const element = fixture('vl-rich-data-filter-fixture');
+        assert.isTrue(element.__filterToggleContainer.hidden);
+        assert.isTrue(element.__filterCloseButton.hidden);
+        assert.isTrue(element.__filterOpenContainer.hidden);
 
         element.setAttribute('data-vl-filter-closable', '');
 
-        expect(element.__filterToggleContainer.hidden).to.be.false;
-        expect(element.__filterCloseButton.hidden).to.be.false;
-        expect(element.__filterOpenContainer.hidden).to.be.false;
+        assert.isFalse(element.__filterToggleContainer.hidden);
+        assert.isFalse(element.__filterCloseButton.hidden);
+        assert.isFalse(element.__filterOpenContainer.hidden);
       });
 
       test('als het data-vl-filter-closable attribuut wordt gezet, wordt de open knop enkel getoond bij een klein scherm en het zoekscherm verborgen', () => {
-        const element = fixture('vl-rich-data-met-filter-fixture');
+        const element = fixture('vl-rich-data-filter-fixture');
         assert.isFalse(element.__filterOpenContainer.classList.contains('vl-u-visible--s'));
         assert.isFalse(element.__searchColumn.classList.contains('vl-u-hidden--s'));
 
@@ -268,98 +267,100 @@
       });
 
       test('door het attribuut data-vl-filter-closed te zetten, kan de filter gesloten worden', () => {
-        const element = fixture('vl-rich-data-met-closable-filter-fixture');
+        const element = fixture('vl-rich-data-closable-filter-fixture');
         const content = element.shadowRoot.querySelector('#content');
         const search = element.shadowRoot.querySelector('#search');
         ['size', 'medium-size'].forEach((size) => {
-          expect(content.getAttribute(size)).to.be.equal('8');
-          expect(search.getAttribute(size)).to.be.equal('4');
+          assert.equal(content.getAttribute(size), '8');
+          assert.equal(search.getAttribute(size), '4');
         });
-        expect(search.hidden).to.be.false;
+        assert.isFalse(search.hidden);
 
         element.setAttribute('data-vl-filter-closed', '');
 
         ['size', 'medium-size'].forEach((size) => {
-          expect(content.getAttribute('size')).to.be.equal('12');
-          expect(search.getAttribute('size')).to.be.equal('0');
+          assert.equal(content.getAttribute('size'), '12');
+          assert.equal(search.getAttribute('size'), '0');
         });
-        expect(search.hidden).to.be.true;
+        assert.isTrue(search.hidden);
 
         element.removeAttribute('data-vl-filter-closed');
         ['size', 'medium-size'].forEach((size) => {
-          expect(content.getAttribute(size)).to.be.equal('8');
-          expect(search.getAttribute(size)).to.be.equal('4');
+          assert.equal(content.getAttribute(size), '8');
+          assert.equal(search.getAttribute(size), '4');
         });
-        expect(search.hidden).to.be.false;
+        assert.isFalse(search.hidden);
       });
 
       test('als op de sluitknop wordt geklikt, wordt het attribuut data-vl-filter-closed gezet', () => {
-        const element = fixture('vl-rich-data-met-closable-filter-fixture');
-        expect(element.getAttribute('data-vl-filter-closed')).to.be.null;
+        const element = fixture('vl-rich-data-closable-filter-fixture');
+        assert.isFalse(element.hasAttribute('data-vl-filter-closed'));
 
         element.__filterCloseButton.click();
 
-        expect(element.getAttribute('data-vl-filter-closed')).to.be.equal('');
+        assert.isTrue(element.hasAttribute('data-vl-filter-closed'));
       });
 
-      test('als op de openknop wordt geklikt, wordt het attribuut data-vl-filter-closed gezet en de filter modal geopend met de filter als content', () => {
-        const element = fixture('vl-rich-data-met-closable-filter-fixture');
-        expect(element.getAttribute('data-vl-filter-closed')).to.be.null;
-        expect(element.__filterModal._dialogElement.hasAttribute('open')).to.be.false;
-        expect(element.__filterModal.querySelector('div[slot=content]')).to.be.null;
+      test('als op de open knop wordt geklikt, wordt het attribuut data-vl-filter-closed gezet en de filter modal geopend met de filter als content', () => {
+        const element = fixture('vl-rich-data-closable-filter-fixture');
+        assert.isFalse(element.hasAttribute('data-vl-filter-closed'));
+        assert.isFalse(element.__searchFilter.hasAttribute('data-vl-mobile-modal'));
+        should.exist(element.__searchColumn.querySelector('#filter-slot'));
+        assert.notEqual(element.__filterSlot.parentElement, element._element);
 
-        sandbox.spy(element.__filterModal, 'open');
         element.__filterOpenButton.click();
 
-        expect(element.getAttribute('data-vl-filter-closed')).to.be.equal('');
-        assert(element.__filterModal.open.called);
-        expect(element.__filterModal.querySelector('div[slot=content]')).to.not.be.null;
+        assert.isTrue(element.hasAttribute('data-vl-filter-closed'));
+        assert.isTrue(element.__searchFilter.hasAttribute('data-vl-mobile-modal'));
+        should.not.exist(element.__searchColumn.querySelector('#filter-slot'));
+        assert.equal(element.__filterSlot.parentElement, element._element);
       });
 
       test('als op de filter toggle knop tweemaal geklikt wordt, wordt het attribuut data-vl-filter-closed eerst gezet en dan terug afgehaald', () => {
-        const element = fixture('vl-rich-data-met-closable-filter-fixture');
-        expect(element.getAttribute('data-vl-filter-closed')).to.be.null;
+        const element = fixture('vl-rich-data-closable-filter-fixture');
+        assert.isFalse(element.hasAttribute('data-vl-filter-closed'));
 
         element.__filterToggleButton.click();
-        expect(element.getAttribute('data-vl-filter-closed')).to.be.equal('');
+        assert.isTrue(element.hasAttribute('data-vl-filter-closed'));
         element.__filterToggleButton.click();
-        expect(element.getAttribute('data-vl-filter-closed')).to.be.null;
+        should.not.exist(element.getAttribute('data-vl-filter-closed'));
       });
 
-      test('als op de filter toggle knop wordt geklikt na het openen en sluiten van de modal, wordt de filter content terug op de search kolom gezet zonder slot content', () => {
-        const element = fixture('vl-rich-data-met-closable-filter-fixture');
+      test('als op de filter toggle knop wordt geklikt na het openen en sluiten van de modal, wordt de filter content terug op de search kolom gezet', () => {
+        const element = fixture('vl-rich-data-closable-filter-fixture');
         element.__filterOpenButton.click();
-        element.__filterModal.close();
+        element.__searchFilter._submitButton.click();
 
         element.__filterToggleButton.click();
 
-        expect(element.__filterModal.querySelector('div[slot=content]')).to.be.null;
-        expect(element.__searchColumn.querySelector('slot[name=filter]')).to.not.be.null;
-        expect(element.__searchColumn.querySelector('div[slot=content]')).to.be.null;
+        should.exist(element.__searchColumn.querySelector('#filter-slot'));
+        assert.notEqual(element.__filterSlot.parentElement, element._element);
+        assert.isFalse(element.__searchFilter.hasAttribute('data-vl-mobile-modal'));
+        assert.isFalse(element.__searchFilter.hidden);
       });
 
       test('als de filter modal wordt geopend, worden de velden met data-vl-hidden-in-modal niet getoond', () => {
-        const element = fixture('vl-rich-data-met-closable-filter-fixture');
-        expect(element.querySelector('#hidden-in-modal').hidden).to.be.false;
+        const element = fixture('vl-rich-data-closable-filter-fixture');
+        assert.isFalse(element.querySelector('#hidden-in-modal').hidden);
 
         element.__filterOpenButton.click();
 
-        expect(element.querySelector('#hidden-in-modal').hidden).to.be.true;
-        element.__filterModal.close();
+        assert.isTrue(element.querySelector('#hidden-in-modal').hidden);
+        element.__searchFilter._submitButton.click();
         element.__filterToggleButton.click();
 
-        expect(element.querySelector('#hidden-in-modal').hidden).to.be.false;
+        assert.isFalse(element.querySelector('#hidden-in-modal').hidden);
       });
 
       test('door slots te zetten, kunnen de teksten van de filter en toggle knoppen gewijzigd worden', () => {
-        const element = fixture('vl-rich-data-met-andere-teksten');
+        const element = fixture('vl-rich-data-text-fixture');
         const toggleButton = element.__filterToggleButton;
         const filterCloseButton = element.__filterCloseButton;
         const toggleText = toggleButton.querySelector('slot[name=toggle-filter-button-text]').assignedElements()[0].innerHTML;
         const closeText = filterCloseButton.querySelector('slot[name=close-filter-button-text]').assignedElements()[0].innerHTML;
 
-        expect(toggleText).to.be.equal('Foo');
-        expect(closeText).to.be.equal('Bar');
+        assert.equal(toggleText, 'Foo');
+        assert.equal(closeText, 'Bar');
       });
 
       const setInputValue = (input, value) => {

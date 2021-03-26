@@ -2,7 +2,6 @@ const {VlElement} = require('vl-ui-core').Test;
 const {By} = require('vl-ui-core').Test.Setup;
 const {VlPager} = require('vl-ui-pager').Test;
 const {VlSearchFilter} = require('vl-ui-search-filter').Test;
-const {VlModal} = require('vl-ui-modal').Test;
 const {VlSelect} = require('vl-ui-select').Test;
 
 class VlRichData extends VlElement {
@@ -43,12 +42,6 @@ class VlRichData extends VlElement {
   async openModalSearchFilter() {
     const button = await this.shadowRoot.findElement(By.css('#open-filter-button'));
     return button.click();
-  }
-
-  async closeModalSearchFilter() {
-    const modalElement = await this.shadowRoot.findElement(By.css('#filter-modal'));
-    const modal = await new VlModal(this.driver, modalElement);
-    return modal.close();
   }
 
   async _getSorterSlotElements() {

@@ -38,11 +38,10 @@
 	},
 	"dependencies": {
 		"vl-ui-button": "^5.0.10",
-		"vl-ui-core": "^7.1.1",
-		"vl-ui-form-message": "^5.0.7",
-		"vl-ui-grid": "^3.2.1",
+		"vl-ui-core": "^7.2.1",
+		"vl-ui-form-message": "^5.0.8",
+		"vl-ui-grid": "^3.3.0",
 		"vl-ui-icon": "^5.2.2",
-		"vl-ui-modal": "^4.0.4",
 		"vl-ui-pager": "^3.0.11"
 	},
 	"peerDependencies": {
@@ -51,17 +50,16 @@
 		"vl-ui-form-message": "^5.0.6",
 		"vl-ui-grid": "^3.2.0",
 		"vl-ui-icon": "^5.2.1",
-		"vl-ui-modal": "^4.0.3",
 		"vl-ui-pager": "^3.0.10"
 	},
 	"devDependencies": {
-		"@govflanders/vl-ui-core": "^4.1.3",
-		"@govflanders/vl-ui-util": "^3.12.3",
-		"vl-ui-body": "^1.0.7",
-		"vl-ui-input-field": "^3.2.7",
-		"vl-ui-search-filter": "^3.1.6",
-		"vl-ui-search-results": "^1.0.3",
-		"vl-ui-select": "^4.2.0",
+		"@govflanders/vl-ui-core": "^4.1.17",
+		"@govflanders/vl-ui-util": "^3.12.17",
+		"vl-ui-body": "^1.0.8",
+		"vl-ui-input-field": "^3.2.8",
+		"vl-ui-search-filter": "github:milieuinfo/webcomponent-vl-ui-search-filter#upgrade",
+		"vl-ui-search-results": "^1.0.4",
+		"vl-ui-select": "^4.2.1",
 		"vl-ui-util": "^5.3.10"
 	}
 }
