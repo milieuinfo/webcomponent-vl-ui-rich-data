@@ -195,6 +195,7 @@ describe('vl-rich-data', async () => {
     await assert.eventually.lengthOf(searchResults.getSearchResults(), 1);
 
     await richData.openModalSearchFilter();
+    searchFilter = await richData.getSearchFilter();
     await searchFilterId.clear();
     await searchFilterName.clear();
   });
