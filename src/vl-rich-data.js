@@ -45,12 +45,12 @@ export class VlRichData extends vlElement(HTMLElement) {
       <div>
         <div is="vl-grid" is-stacked>
           <div id="toggle-filter" is="vl-column" class="vl-u-align-right vl-u-hidden--s" hidden data-vl-size="12" data-vl-medium-size="12">
-            <button id="toggle-filter-button" is="vl-button-link" type="button" aria-label="Toon de filter">
+            <button id="toggle-filter-button" is="vl-button" data-vl-secondary data-vl-narrow type="button" aria-label="Toon de filter">
               <span is="vl-icon" data-vl-icon="content-filter" data-vl-before></span><slot name="toggle-filter-button-text">Filter</slot>
             </button>
           </div>
           <div id="open-filter" is="vl-column" class="vl-u-align-right vl-u-hidden" hidden data-vl-size="12" data-vl-medium-size="12">
-            <button id="open-filter-button" is="vl-button-link" type="button" aria-label="Toon de filter">
+            <button id="open-filter-button" is="vl-button" data-vl-secondary data-vl-narrow type="button" aria-label="Toon de filter">
               <span is="vl-icon" data-vl-icon="content-filter" data-vl-before></span><slot name="toggle-filter-button-text">Filter</slot>
             </button>
           </div>
