@@ -6776,10 +6776,12 @@ a.vl-vi {
   }
 
   __processNoContent() {
-    if (!this._paging || this._paging.totalItems === 0) {
-      this.__showNoContent();
-    } else {
-      this.__showContent();
+    if (this.querySelector('[slot="no-content-message"]')) {
+      if (!this._paging || this._paging.totalItems === 0) {
+        this.__showNoContent();
+      } else {
+        this.__showContent();
+      }
     }
   }
 
