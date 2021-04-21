@@ -1,4 +1,4 @@
-import {vlElement, define} from 'vl-ui-core';
+import {define, vlElement} from 'vl-ui-core';
 import 'vl-ui-grid';
 import 'vl-ui-form-message';
 import 'vl-ui-icon';
@@ -25,7 +25,8 @@ import 'vl-ui-pager';
  */
 export class VlRichData extends vlElement(HTMLElement) {
   static get _observedAttributes() {
-    return ['data', 'collapsed-m', 'collapsed-s', 'collapsed-xs', 'filter-closable', 'filter-closed'];
+    return ['data', 'collapsed-m', 'collapsed-s', 'collapsed-xs',
+      'filter-closable', 'filter-closed'];
   }
 
   static get _defaultSearchColumnSize() {
@@ -6727,8 +6728,11 @@ a.vl-vi {
                 </label>
                 <slot name="sorter"></slot>
               </div>
-              <div is="vl-column" data-vl-size="12" data-vl-medium-size="12">
+              <div id="content-wrapper" is="vl-column" data-vl-size="12" data-vl-medium-size="12">
                 <slot name="content">${content}</slot>
+              </div>
+              <div id="no-content-wrapper" is="vl-column" data-vl-size="12" data-vl-medium-size="12" class="vl-u-visually-hidden">
+                <slot name="no-content-message"></slot>
               </div>
             </div>
           </div>
@@ -6738,15 +6742,16 @@ a.vl-vi {
         </div>
       </div>
     `);
-
-    this.__processSearchFilter();
-    this.__processSorter();
-
-    this.__observePager();
-    this.__observeFilterButtons();
   }
 
   connectedCallback() {
+    this.__processSearchFilter();
+    this.__processSorter();
+    this.__processNoContent();
+
+    this.__observePager();
+    this.__observeFilterButtons();
+
     this._observer = this.__observeSearchFilter();
     this.__updateNumberOfSearchResults();
   }
@@ -6766,7 +6771,40 @@ a.vl-vi {
       this._sorting = sorting;
       this._filter = filter;
       this.__data = object;
+      this.__toggleContent(paging);
     }
+  }
+
+  __processNoContent() {
+    if (!this._paging || this._paging.totalItems === 0) {
+      this.__showNoContent();
+    } else {
+      this.__showContent();
+    }
+  }
+
+  __toggleContent(paging) {
+    if (this.querySelector('[slot="no-content-message"]')) {
+      if (paging.totalItems === 0) {
+        this.__showNoContent();
+      } else {
+        this.__showContent();
+      }
+    }
+  }
+
+  __showContent() {
+    this.shadowRoot.querySelector('#content-wrapper').classList.remove('vl-u-visually-hidden');
+    this.shadowRoot.querySelector('#search-results').classList.remove('vl-u-visually-hidden');
+    this.shadowRoot.querySelector('#sorter').classList.remove('vl-u-visually-hidden');
+    this.shadowRoot.querySelector('#no-content-wrapper').classList.add('vl-u-visually-hidden');
+  }
+
+  __showNoContent() {
+    this.shadowRoot.querySelector('#content-wrapper').classList.add('vl-u-visually-hidden');
+    this.shadowRoot.querySelector('#search-results').classList.add('vl-u-visually-hidden');
+    this.shadowRoot.querySelector('#sorter').classList.add('vl-u-visually-hidden');
+    this.shadowRoot.querySelector('#no-content-wrapper').classList.remove('vl-u-visually-hidden');
   }
 
   /**

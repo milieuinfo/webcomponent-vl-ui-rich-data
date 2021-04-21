@@ -25,6 +25,15 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="vl-rich-data-no-content-fixture">
+    <template>
+      <vl-rich-data>
+        <vl-pager slot="pager" total-items="25" items-per-page="5" current-page="1"></vl-pager>
+        <span slot="no-content-message">Geen resultaten gevonden</span>
+      </vl-rich-data>
+    </template>
+  </test-fixture>
+
   <script>
     suite('vl-rich-data', () => {
       const should = chai.should();
@@ -105,6 +114,8 @@
         });
       });
 
+      // TODO: dit test niets, de manipulatie op de pager heeft geen gevolg op de view.
+      // Hij is van in het begin al leeg en daarom slaagt de test.
       test('wanneer de total items van de vl-pager leeg of undefined is, zal 0 getoond worden', (done) => {
         const element = fixture('vl-rich-data-pager-fixture');
         const pager = element.__pager;
@@ -114,6 +125,33 @@
           should.exist(element.__numberOfSearchResults);
           assert.equal(element.__searchResults.innerText.trim(), `We vonden 0 resultaten`);
           assert.equal(element.__numberOfSearchResults.innerText, '0');
+          done();
+        });
+      });
+
+      test('wijzigen van de paging data in de component laat overeenkomstige views zien', (done) => {
+        const element = fixture('vl-rich-data-no-content-fixture');
+        element.data = {
+          paging: {
+            currentPage: 0,
+            totalItems: 0,
+          },
+        };
+        customElements.whenDefined('vl-pager').then(() => {
+          assert.isTrue(element.__searchResults.classList.contains('vl-u-visually-hidden'));
+          assert.isTrue(element.__sorterContainer.classList.contains('vl-u-visually-hidden'));
+          assert.isTrue(element.shadowRoot.querySelector('#content-wrapper').classList.contains('vl-u-visually-hidden'));
+          assert.isFalse(element.shadowRoot.querySelector('#no-content-wrapper').classList.contains('vl-u-visually-hidden'));
+          element.data = {
+            paging: {
+              currentPage: 0,
+              totalItems: 20,
+            },
+          };
+          assert.isFalse(element.__searchResults.classList.contains('vl-u-visually-hidden'));
+          assert.isFalse(element.__sorterContainer.classList.contains('vl-u-visually-hidden'));
+          assert.isFalse(element.shadowRoot.querySelector('#content-wrapper').classList.contains('vl-u-visually-hidden'));
+          assert.isTrue(element.shadowRoot.querySelector('#no-content-wrapper').classList.contains('vl-u-visually-hidden'));
           done();
         });
       });
