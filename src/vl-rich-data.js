@@ -89,6 +89,7 @@ export class VlRichData extends vlElement(HTMLElement) {
         </div>
       </div>
     `);
+    this._observer = this.__observeChildren();
   }
 
   connectedCallback() {
@@ -99,7 +100,6 @@ export class VlRichData extends vlElement(HTMLElement) {
     this.__observePager();
     this.__observeFilterButtons();
 
-    this._observer = this.__observeSearchFilter();
     this.__updateNumberOfSearchResults();
   }
 
@@ -141,17 +141,25 @@ export class VlRichData extends vlElement(HTMLElement) {
   }
 
   __showContent() {
-    this.shadowRoot.querySelector('#content-wrapper').classList.remove('vl-u-visually-hidden');
-    this.shadowRoot.querySelector('#search-results').classList.remove('vl-u-visually-hidden');
-    this.shadowRoot.querySelector('#sorter').classList.remove('vl-u-visually-hidden');
-    this.shadowRoot.querySelector('#no-content-wrapper').classList.add('vl-u-visually-hidden');
+    this.shadowRoot.querySelector('#content-wrapper').classList.remove(
+        'vl-u-visually-hidden');
+    this.shadowRoot.querySelector('#search-results').classList.remove(
+        'vl-u-visually-hidden');
+    this.shadowRoot.querySelector('#sorter').classList.remove(
+        'vl-u-visually-hidden');
+    this.shadowRoot.querySelector('#no-content-wrapper').classList.add(
+        'vl-u-visually-hidden');
   }
 
   __showNoContent() {
-    this.shadowRoot.querySelector('#content-wrapper').classList.add('vl-u-visually-hidden');
-    this.shadowRoot.querySelector('#search-results').classList.add('vl-u-visually-hidden');
-    this.shadowRoot.querySelector('#sorter').classList.add('vl-u-visually-hidden');
-    this.shadowRoot.querySelector('#no-content-wrapper').classList.remove('vl-u-visually-hidden');
+    this.shadowRoot.querySelector('#content-wrapper').classList.add(
+        'vl-u-visually-hidden');
+    this.shadowRoot.querySelector('#search-results').classList.add(
+        'vl-u-visually-hidden');
+    this.shadowRoot.querySelector('#sorter').classList.add(
+        'vl-u-visually-hidden');
+    this.shadowRoot.querySelector('#no-content-wrapper').classList.remove(
+        'vl-u-visually-hidden');
   }
 
   /**
@@ -230,7 +238,8 @@ export class VlRichData extends vlElement(HTMLElement) {
 
   get __formDataState() {
     if (this.__searchFilter && this.__searchFilter.formData) {
-      const hasFilterValue = [...this.__searchFilter.formData.values()].find(Boolean);
+      const hasFilterValue = [...this.__searchFilter.formData.values()].find(
+          Boolean);
       if (hasFilterValue) {
         return this.__searchFilter.formData;
       }
@@ -254,7 +263,8 @@ export class VlRichData extends vlElement(HTMLElement) {
         this.__pager.setAttribute('data-vl-current-page', paging.currentPage);
       }
       if (paging.itemsPerPage != null) {
-        this.__pager.setAttribute('data-vl-items-per-page', paging.itemsPerPage);
+        this.__pager.setAttribute('data-vl-items-per-page',
+            paging.itemsPerPage);
       }
       if (paging.totalItems != null) {
         this.__pager.setAttribute('data-vl-total-items', paging.totalItems);
@@ -344,7 +354,8 @@ export class VlRichData extends vlElement(HTMLElement) {
   }
 
   __setHiddenInModalElements(hidden) {
-    this.__searchFilter.querySelectorAll('[data-vl-hidden-in-modal]').forEach((element) => element.hidden = hidden);
+    this.__searchFilter.querySelectorAll('[data-vl-hidden-in-modal]').forEach(
+        (element) => element.hidden = hidden);
   }
 
   __observePager() {
@@ -356,11 +367,14 @@ export class VlRichData extends vlElement(HTMLElement) {
     }
   }
 
-  __observeSearchFilter() {
+  __observeChildren() {
     const observer = new MutationObserver((mutations) => {
-      mutations = mutations.filter((mutation) => mutation.target && mutation.target.slot != 'content');
+      mutations = mutations.filter(
+          (mutation) => mutation.target && mutation.target.slot != 'content');
       if (mutations && mutations.length > 0) {
         this.__processSearchFilter();
+        this.__processSorter();
+        this.__processNoContent();
       }
     });
     observer.observe(this, {childList: true});
@@ -426,7 +440,8 @@ export class VlRichData extends vlElement(HTMLElement) {
     } else {
       if (this.__pager) {
         customElements.whenDefined('vl-pager').then(() => {
-          this.__numberOfSearchResults.textContent = this.__pager.totalItems || 0;
+          this.__numberOfSearchResults.textContent = this.__pager.totalItems ||
+              0;
         });
       }
     }

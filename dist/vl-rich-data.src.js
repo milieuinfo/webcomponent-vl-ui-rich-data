@@ -6742,6 +6742,7 @@ a.vl-vi {
         </div>
       </div>
     `);
+    this._observer = this.__observeChildren();
   }
 
   connectedCallback() {
@@ -6752,7 +6753,6 @@ a.vl-vi {
     this.__observePager();
     this.__observeFilterButtons();
 
-    this._observer = this.__observeSearchFilter();
     this.__updateNumberOfSearchResults();
   }
 
@@ -6794,17 +6794,25 @@ a.vl-vi {
   }
 
   __showContent() {
-    this.shadowRoot.querySelector('#content-wrapper').classList.remove('vl-u-visually-hidden');
-    this.shadowRoot.querySelector('#search-results').classList.remove('vl-u-visually-hidden');
-    this.shadowRoot.querySelector('#sorter').classList.remove('vl-u-visually-hidden');
-    this.shadowRoot.querySelector('#no-content-wrapper').classList.add('vl-u-visually-hidden');
+    this.shadowRoot.querySelector('#content-wrapper').classList.remove(
+        'vl-u-visually-hidden');
+    this.shadowRoot.querySelector('#search-results').classList.remove(
+        'vl-u-visually-hidden');
+    this.shadowRoot.querySelector('#sorter').classList.remove(
+        'vl-u-visually-hidden');
+    this.shadowRoot.querySelector('#no-content-wrapper').classList.add(
+        'vl-u-visually-hidden');
   }
 
   __showNoContent() {
-    this.shadowRoot.querySelector('#content-wrapper').classList.add('vl-u-visually-hidden');
-    this.shadowRoot.querySelector('#search-results').classList.add('vl-u-visually-hidden');
-    this.shadowRoot.querySelector('#sorter').classList.add('vl-u-visually-hidden');
-    this.shadowRoot.querySelector('#no-content-wrapper').classList.remove('vl-u-visually-hidden');
+    this.shadowRoot.querySelector('#content-wrapper').classList.add(
+        'vl-u-visually-hidden');
+    this.shadowRoot.querySelector('#search-results').classList.add(
+        'vl-u-visually-hidden');
+    this.shadowRoot.querySelector('#sorter').classList.add(
+        'vl-u-visually-hidden');
+    this.shadowRoot.querySelector('#no-content-wrapper').classList.remove(
+        'vl-u-visually-hidden');
   }
 
   /**
@@ -6883,7 +6891,8 @@ a.vl-vi {
 
   get __formDataState() {
     if (this.__searchFilter && this.__searchFilter.formData) {
-      const hasFilterValue = [...this.__searchFilter.formData.values()].find(Boolean);
+      const hasFilterValue = [...this.__searchFilter.formData.values()].find(
+          Boolean);
       if (hasFilterValue) {
         return this.__searchFilter.formData;
       }
@@ -6907,7 +6916,8 @@ a.vl-vi {
         this.__pager.setAttribute('data-vl-current-page', paging.currentPage);
       }
       if (paging.itemsPerPage != null) {
-        this.__pager.setAttribute('data-vl-items-per-page', paging.itemsPerPage);
+        this.__pager.setAttribute('data-vl-items-per-page',
+            paging.itemsPerPage);
       }
       if (paging.totalItems != null) {
         this.__pager.setAttribute('data-vl-total-items', paging.totalItems);
@@ -6997,7 +7007,8 @@ a.vl-vi {
   }
 
   __setHiddenInModalElements(hidden) {
-    this.__searchFilter.querySelectorAll('[data-vl-hidden-in-modal]').forEach((element) => element.hidden = hidden);
+    this.__searchFilter.querySelectorAll('[data-vl-hidden-in-modal]').forEach(
+        (element) => element.hidden = hidden);
   }
 
   __observePager() {
@@ -7009,11 +7020,14 @@ a.vl-vi {
     }
   }
 
-  __observeSearchFilter() {
+  __observeChildren() {
     const observer = new MutationObserver((mutations) => {
-      mutations = mutations.filter((mutation) => mutation.target && mutation.target.slot != 'content');
+      mutations = mutations.filter(
+          (mutation) => mutation.target && mutation.target.slot != 'content');
       if (mutations && mutations.length > 0) {
         this.__processSearchFilter();
+        this.__processSorter();
+        this.__processNoContent();
       }
     });
     observer.observe(this, {childList: true});
@@ -7079,7 +7093,8 @@ a.vl-vi {
     } else {
       if (this.__pager) {
         customElements.whenDefined('vl-pager').then(() => {
-          this.__numberOfSearchResults.textContent = this.__pager.totalItems || 0;
+          this.__numberOfSearchResults.textContent = this.__pager.totalItems ||
+              0;
         });
       }
     }
