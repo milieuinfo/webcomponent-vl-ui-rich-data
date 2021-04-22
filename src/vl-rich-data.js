@@ -9,6 +9,7 @@ import '/node_modules/vl-ui-pager/dist/vl-pager.js';
  * VlRichData
  * @class
  * @classdesc
+ * //TODO change beschrijven
  *
  * @extends HTMLElement
  * @mixes vlElement
@@ -73,7 +74,7 @@ export class VlRichData extends vlElement(HTMLElement) {
                 <label is="vl-form-label" for="filter-sort">
                   Sorteer
                 </label>
-                <slot name="sorter"></slot>
+                <slot id="sorter-slot" name="sorter"></slot>
               </div>
               <div id="content-wrapper" is="vl-column" data-vl-size="12" data-vl-medium-size="12">
                 <slot name="content">${content}</slot>
@@ -89,7 +90,26 @@ export class VlRichData extends vlElement(HTMLElement) {
         </div>
       </div>
     `);
-    this._observer = this.__observeChildren();
+    this._observer = this._createObserver(this, ()=> this.__toggleContent());
+
+    this.__filterSlot.addEventListener('slotchange', ()=>{
+      if (this._filterObserver) {
+        this._filterObserver.disconnect();
+      }
+      if (this.__filter) {
+        this._filterObserver = this._createObserver(this.__filter, ()=>this.__processFilter());
+      }
+      this.__processFilter();
+    });
+    this.__sorterSlot.addEventListener('slotchange', () => {
+      if (this._sorterObserver) {
+        this._sorterObserver.disconnect();
+      }
+      if (this.__sorter) {
+        this._sorterObserver = this._createObserver(this.__sorter, () => this.__processSorter());
+      }
+      this.__processSorter();
+    });
   }
 
   connectedCallback() {
@@ -105,6 +125,12 @@ export class VlRichData extends vlElement(HTMLElement) {
 
   disconnectedCallback() {
     this._observer.disconnect();
+    if (this._filterObserver) {
+      this._filterObserver.disconnect();
+    }
+    if (this._sorterObserver) {
+      this._sorterObserver.disconnect();
+    }
   }
 
   /**
@@ -133,14 +159,10 @@ export class VlRichData extends vlElement(HTMLElement) {
   }
 
   __showContent() {
-    this.shadowRoot.querySelector('#content-wrapper').classList.remove(
-        'vl-u-visually-hidden');
-    this.shadowRoot.querySelector('#search-results').classList.remove(
-        'vl-u-visually-hidden');
-    this.shadowRoot.querySelector('#sorter').classList.remove(
-        'vl-u-visually-hidden');
-    this.shadowRoot.querySelector('#no-content-wrapper').classList.add(
-        'vl-u-visually-hidden');
+    this.shadowRoot.querySelector('#content-wrapper').classList.remove('vl-u-visually-hidden');
+    this.shadowRoot.querySelector('#search-results').classList.remove('vl-u-visually-hidden');
+    this.shadowRoot.querySelector('#sorter').classList.remove('vl-u-visually-hidden');
+    this.shadowRoot.querySelector('#no-content-wrapper').classList.add('vl-u-visually-hidden');
   }
 
   __showNoContent() {
@@ -208,6 +230,10 @@ export class VlRichData extends vlElement(HTMLElement) {
 
   get __numberOfSearchResults() {
     return this.__searchResults.querySelector('#search-results-number');
+  }
+
+  get __sorterSlot() {
+    return this.shadowRoot.querySelector('#sorter-slot');
   }
 
   get __sorterContainer() {
@@ -363,17 +389,15 @@ export class VlRichData extends vlElement(HTMLElement) {
     }
   }
 
-  __observeChildren() {
+  _createObserver(observable, observeCallback) {
     const observer = new MutationObserver((mutations) => {
       mutations = mutations.filter(
           (mutation) => mutation.target && mutation.target.slot != 'content');
       if (mutations && mutations.length > 0) {
-        this.__processFilter();
-        this.__processSorter();
-        this.__toggleContent(this._paging);
+        observeCallback();
       }
     });
-    observer.observe(this, {childList: true});
+    observer.observe(observable, {childList: true});
     return observer;
   }
 
@@ -383,8 +407,10 @@ export class VlRichData extends vlElement(HTMLElement) {
         this.__searchFilter.setAttribute('data-vl-alt', '');
         this.__addSearchFilterEventListeners();
       }
-      this.__showSearchColumn();
-      this.__showSearchResults();
+      if (!this.hasAttribute('data-vl-filter-closed')) {
+        this.__showSearchColumn();
+        this.__showSearchResults();
+      }
     } else {
       this.__hideSearchColumn();
       this.__hideSearchResults();
