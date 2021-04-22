@@ -6748,7 +6748,7 @@ a.vl-vi {
   connectedCallback() {
     this.__processSearchFilter();
     this.__processSorter();
-    this.__processNoContent();
+    this.__toggleContent();
 
     this.__observePager();
     this.__observeFilterButtons();
@@ -6771,23 +6771,13 @@ a.vl-vi {
       this._sorting = sorting;
       this._filter = filter;
       this.__data = object;
-      this.__toggleContent(paging);
+      this.__toggleContent();
     }
   }
 
-  __processNoContent() {
+  __toggleContent() {
     if (this.querySelector('[slot="no-content-message"]')) {
       if (!this._paging || this._paging.totalItems === 0) {
-        this.__showNoContent();
-      } else {
-        this.__showContent();
-      }
-    }
-  }
-
-  __toggleContent(paging) {
-    if (this.querySelector('[slot="no-content-message"]')) {
-      if (paging.totalItems === 0) {
         this.__showNoContent();
       } else {
         this.__showContent();
@@ -6901,7 +6891,7 @@ a.vl-vi {
     }
   }
 
-  get __pagingState() {
+  get _paging() {
     if (this.__pager) {
       return {
         currentPage: this.__pager.currentPage,
@@ -6954,7 +6944,7 @@ a.vl-vi {
   __getState({paging}) {
     const state = {};
     state.formData = this.__formDataState;
-    state.paging = this.__pagingState;
+    state.paging = this._paging;
     if (!paging && state.paging) {
       state.paging.currentPage = 1;
     }
@@ -7029,7 +7019,7 @@ a.vl-vi {
       if (mutations && mutations.length > 0) {
         this.__processSearchFilter();
         this.__processSorter();
-        this.__processNoContent();
+        this.__toggleContent(this._paging);
       }
     });
     observer.observe(this, {childList: true});
