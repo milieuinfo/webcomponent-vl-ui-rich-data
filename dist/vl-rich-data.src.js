@@ -6746,7 +6746,7 @@ a.vl-vi {
   }
 
   connectedCallback() {
-    this.__processSearchFilter();
+    this.__processFilter();
     this.__processSorter();
     this.__toggleContent();
 
@@ -6819,8 +6819,12 @@ a.vl-vi {
     return this.shadowRoot.querySelector('#content');
   }
 
-  get __searchFilter() {
+  get __filter() {
     return this.querySelector('[slot="filter"]');
+  }
+
+  get __searchFilter() {
+    return this.querySelector('[is="vl-search-filter"]');
   }
 
   get __filterCloseButton() {
@@ -6999,7 +7003,7 @@ a.vl-vi {
   }
 
   __setHiddenInModalElements(hidden) {
-    this.__searchFilter.querySelectorAll('[data-vl-hidden-in-modal]').forEach(
+    this.__filter.querySelectorAll('[data-vl-hidden-in-modal]').forEach(
         (element) => element.hidden = hidden);
   }
 
@@ -7017,7 +7021,7 @@ a.vl-vi {
       mutations = mutations.filter(
           (mutation) => mutation.target && mutation.target.slot != 'content');
       if (mutations && mutations.length > 0) {
-        this.__processSearchFilter();
+        this.__processFilter();
         this.__processSorter();
         this.__toggleContent(this._paging);
       }
@@ -7026,12 +7030,14 @@ a.vl-vi {
     return observer;
   }
 
-  __processSearchFilter() {
-    if (this.__searchFilter) {
-      this.__searchFilter.setAttribute('data-vl-alt', '');
+  __processFilter() {
+    if (this.__filter) {
+      if (this.__searchFilter) {
+        this.__searchFilter.setAttribute('data-vl-alt', '');
+        this.__addSearchFilterEventListeners();
+      }
       this.__showSearchColumn();
       this.__showSearchResults();
-      this.__addSearchFilterEventListeners();
     } else {
       this.__hideSearchColumn();
       this.__hideSearchResults();

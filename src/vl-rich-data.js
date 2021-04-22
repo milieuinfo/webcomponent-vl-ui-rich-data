@@ -93,7 +93,7 @@ export class VlRichData extends vlElement(HTMLElement) {
   }
 
   connectedCallback() {
-    this.__processSearchFilter();
+    this.__processFilter();
     this.__processSorter();
     this.__toggleContent();
 
@@ -166,8 +166,12 @@ export class VlRichData extends vlElement(HTMLElement) {
     return this.shadowRoot.querySelector('#content');
   }
 
-  get __searchFilter() {
+  get __filter() {
     return this.querySelector('[slot="filter"]');
+  }
+
+  get __searchFilter() {
+    return this.querySelector('[is="vl-search-filter"]');
   }
 
   get __filterCloseButton() {
@@ -346,7 +350,7 @@ export class VlRichData extends vlElement(HTMLElement) {
   }
 
   __setHiddenInModalElements(hidden) {
-    this.__searchFilter.querySelectorAll('[data-vl-hidden-in-modal]').forEach(
+    this.__filter.querySelectorAll('[data-vl-hidden-in-modal]').forEach(
         (element) => element.hidden = hidden);
   }
 
@@ -364,7 +368,7 @@ export class VlRichData extends vlElement(HTMLElement) {
       mutations = mutations.filter(
           (mutation) => mutation.target && mutation.target.slot != 'content');
       if (mutations && mutations.length > 0) {
-        this.__processSearchFilter();
+        this.__processFilter();
         this.__processSorter();
         this.__toggleContent(this._paging);
       }
@@ -373,12 +377,14 @@ export class VlRichData extends vlElement(HTMLElement) {
     return observer;
   }
 
-  __processSearchFilter() {
-    if (this.__searchFilter) {
-      this.__searchFilter.setAttribute('data-vl-alt', '');
+  __processFilter() {
+    if (this.__filter) {
+      if (this.__searchFilter) {
+        this.__searchFilter.setAttribute('data-vl-alt', '');
+        this.__addSearchFilterEventListeners();
+      }
       this.__showSearchColumn();
       this.__showSearchResults();
-      this.__addSearchFilterEventListeners();
     } else {
       this.__hideSearchColumn();
       this.__hideSearchResults();
