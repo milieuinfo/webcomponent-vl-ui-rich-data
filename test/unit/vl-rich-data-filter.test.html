@@ -85,9 +85,49 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="vl-rich-data-alt-filter-fixture">
+    <template>
+      <vl-rich-data data-vl-filter-title='title'>
+        <div slot="filter">
+          <div id="search-filter" is="vl-search-filter">
+            <form id="form">
+              <label>Hier kunnen filtervelden komen</label>
+              <input is="vl-input-field" type="text" name="filter1"/>
+            </form>
+            <div>
+              <button is="vl-button-link" type="reset" form="form">Zoekopdracht verwijderen</button>
+            </div>
+          </div>
+        </div>
+        <vl-pager slot="pager" total-items="20" items-per-page="5" current-page="1"></vl-pager>
+      </vl-rich-data>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="vl-rich-data-filter-visible-fixture">
+    <template>
+      <vl-rich-data data-vl-filter-title='title'>
+        <div slot="filter">
+          <span>Something else</span>
+        </div>
+        <vl-pager slot="pager" total-items="20" items-per-page="5" current-page="1"></vl-pager>
+      </vl-rich-data>
+    </template>
+  </test-fixture>
+
   <script>
     suite('vl-rich-data met filter', () => {
       const should = chai.should();
+
+      test('vl-search-filter krijgt data-vl-alt als attribuut', () => {
+        const element = fixture('vl-rich-data-alt-filter-fixture');
+        assert.isTrue(element.querySelector('#search-filter').hasAttribute('data-vl-alt'));
+      });
+
+      test('wanneer filter slot geen vl-search-filter bevat, is hij toch nog zichtbaar', () => {
+        const element = fixture('vl-rich-data-filter-visible-fixture');
+        assert.isFalse(element.__searchColumn.hidden);
+      });
 
       test('wanneer geen filterslot bestaat, zal er geen search filter en search results element aanwezig zijn', () => {
         const element = fixture('vl-rich-data-fixture');
