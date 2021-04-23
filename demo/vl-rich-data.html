@@ -39,6 +39,13 @@
                   <p is="vl-form-annotation" for="filterOpId">Project id</p>
                   <input is="vl-input-field" id="filterOpId" type="text" name="id" value="" data-vl-block />
                 </div>
+                <div>
+                  <p is="vl-form-annotation" for="filterOpHuppeldepup">Huppeldepup</p>
+                  <select is="vl-select" data-vl-select
+                          data-vl-select-deletable
+                          data-vl-select-search-no-result-limit id="filterOpHuppeldepup" name="huppel" data-vl-block >
+                  </select>
+                </div>
               </section>
               <section>
                 <h2>Project details</h2>
@@ -69,6 +76,13 @@
             const sorter = element.querySelector('[slot="sorter"]');
             const pager = element.querySelector('vl-pager');
 
+            setTimeout(()=>{
+              element.querySelector('#filterOpHuppeldepup').choices = [{
+                label: 'hallo', value: 'hallo',
+              }, {
+                label: 'daag', value: 'daag',
+              }];
+            });
             const data = {
               'data': [{
                 'id': 0,
