@@ -198,6 +198,29 @@ describe('vl-rich-data', async () => {
     await searchFilterName.clear();
   });
 
+  it('als gebruiker kan ik de geen resultaten message zien wanneer er 0 resultaten zijn', async () => {
+    const richData = await vlRichDataPage.getRichData();
+    const searchFilter = await richData.getSearchFilter();
+    const searchFilterName = await vlRichDataPage.getSearchFilterInputFieldByName(searchFilter, 'name');
+
+    await assert.eventually.equal(richData.getNumberOfSearchResults(), 25);
+    await searchFilterName.setValue('jbibbfbdf');
+    await assert.eventually.equal(richData.getNumberOfSearchResults(), 0);
+
+    await assert.eventually.isTrue(richData.noContentIsVisible());
+    await assert.eventually.isFalse(richData.contentIsVisible());
+    await assert.eventually.isFalse(richData.sorterIsVisible());
+    await assert.eventually.isFalse(richData.searchResultsIsVisible());
+
+    await searchFilterName.clear();
+    await assert.eventually.equal(richData.getNumberOfSearchResults(), 25);
+
+    await assert.eventually.isFalse(richData.noContentIsVisible());
+    await assert.eventually.isTrue(richData.contentIsVisible());
+    await assert.eventually.isTrue(richData.sorterIsVisible());
+    await assert.eventually.isTrue(richData.searchResultsIsVisible());
+  });
+
   const changeWindowWidth = async (size) => {
     const rect = await driver.manage().window().getRect();
     originalWindowWidth = rect.width;
