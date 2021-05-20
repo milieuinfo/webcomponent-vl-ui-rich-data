@@ -57,7 +57,6 @@
 		"@govflanders/vl-ui-util": "^3.12.23",
 		"vl-ui-body": "^1.0.8",
 		"vl-ui-input-field": "^3.2.11",
-		"vl-ui-multiselect": "^4.1.2",
 		"vl-ui-search-filter": "^3.3.3",
 		"vl-ui-search-results": "^1.0.4",
 		"vl-ui-select": "^4.3.1",
