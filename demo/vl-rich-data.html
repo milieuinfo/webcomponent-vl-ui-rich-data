@@ -11,6 +11,7 @@
     <script type="module" src="/node_modules/vl-ui-input-field/dist/vl-input-field.js"></script>
     <script type="module" src="/node_modules/vl-ui-button/dist/vl-button.js"></script>
     <script type="module" src="/node_modules/vl-ui-form-message/dist/vl-form-message.js"></script>
+    <script type="module" src="/node_modules/vl-ui-multiselect/dist/vl-multiselect.js"></script>
 
     <script type="module" src="/src/vl-rich-data.js"></script>
 
@@ -22,6 +23,7 @@
     <link rel="stylesheet" type="text/css" href="/node_modules/vl-ui-button/dist/style.css" />
     <link rel="stylesheet" type="text/css" href="/node_modules/vl-ui-search-filter/dist/style.css" />
     <link rel="stylesheet" type="text/css" href="/node_modules/vl-ui-form-message/dist/style.css" />
+    <link rel="stylesheet" type="text/css" href="/node_modules/vl-ui-multiselect/dist/style.css" />
   </head>
 
 	<body is="vl-body">
@@ -52,9 +54,16 @@
                   <label is="vl-form-label" for="filterOpNaamManager">Manager familienaam</label>
                   <input is="vl-input-field" id="filterOpNaamManager" type="text" name="manager.lastName" value="" data-vl-block />
                 </div>
+                <div>
+                  <select id="multiselect" is="vl-multiselect" multiple>
+                    <option value="Belgium">België</option>
+                    <option value="Germany">Duitsland</option>
+                    <option value="France">Frankrijk</option>
+                  </select>
+                </div>
               </section>
               <div>
-                <button is="vl-button" type="button">Zoeken</button>
+                <button is="vl-button" type="submit">Zoeken</button>
               </div>
             </form>
             <div>
