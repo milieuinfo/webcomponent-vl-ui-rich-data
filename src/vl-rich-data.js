@@ -85,15 +85,13 @@ export class VlRichData extends vlElement(HTMLElement) {
         </div>
       </div>
     `);
-
-    this.__processSearchFilter();
-    this.__processSorter();
-
-    this.__observePager();
-    this.__observeFilterButtons();
   }
 
   connectedCallback() {
+    this.__processSearchFilter();
+    this.__processSorter();
+    this.__observePager();
+    this.__observeFilterButtons();
     this._observer = this.__observeSearchFilter();
     this.__updateNumberOfSearchResults();
   }
