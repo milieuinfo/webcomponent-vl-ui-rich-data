@@ -57,6 +57,7 @@
 		"@govflanders/vl-ui-util": "^3.12.23",
 		"vl-ui-body": "^1.0.8",
 		"vl-ui-form": "^1.1.1",
+		"vl-ui-form-validation": "^4.0.0",
 		"vl-ui-input-field": "^3.2.11",
 		"vl-ui-search-filter": "^3.3.3",
 		"vl-ui-search-results": "^1.0.4",
