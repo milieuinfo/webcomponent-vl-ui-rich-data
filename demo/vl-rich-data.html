@@ -10,7 +10,9 @@
     <script type="module" src="/node_modules/vl-ui-pager/dist/vl-pager.js"></script>
     <script type="module" src="/node_modules/vl-ui-input-field/dist/vl-input-field.js"></script>
     <script type="module" src="/node_modules/vl-ui-button/dist/vl-button.js"></script>
+    <script type="module" src="/node_modules/vl-ui-form/dist/vl-form-all.js"></script>
     <script type="module" src="/node_modules/vl-ui-form-message/dist/vl-form-message.js"></script>
+    <script type="module" src="/node_modules/vl-ui-form-validation/dist/vl-form-validation.js"></script>
 
     <script type="module" src="/src/vl-rich-data.js"></script>
 
@@ -21,6 +23,7 @@
     <link rel="stylesheet" type="text/css" href="/node_modules/vl-ui-input-field/dist/style.css" />
     <link rel="stylesheet" type="text/css" href="/node_modules/vl-ui-button/dist/style.css" />
     <link rel="stylesheet" type="text/css" href="/node_modules/vl-ui-search-filter/dist/style.css" />
+    <link rel="stylesheet" type="text/css" href="/node_modules/vl-ui-form/dist/style.css" />
     <link rel="stylesheet" type="text/css" href="/node_modules/vl-ui-form-message/dist/style.css" />
   </head>
 
@@ -34,7 +37,7 @@
             <option value="manager.lastName">Naam manager</option>
           </select>
           <div is="vl-search-filter" data-vl-alt slot="filter">
-            <form id="rich-data-table-filter-form" novalidate>
+            <form is="vl-form" id="rich-data-table-filter-form">
               <section>
                 <h2>Doorzoek projecten</h2>
                 <div>
