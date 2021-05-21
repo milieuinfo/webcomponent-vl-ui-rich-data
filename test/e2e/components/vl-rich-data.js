@@ -61,6 +61,16 @@ class VlRichData extends VlElement {
   async _getSearchResultsNumberElement() {
     return this.shadowRoot.findElement(By.css('#search-results-number'));
   }
+
+  async contentIsVisible() {
+    const element = await new VlElement(this.driver, await this.shadowRoot.findElement(By.css('slot[name="content"]')));
+    return !(await element.hasAttribute('hidden'));
+  }
+
+  async noContentIsVisible() {
+    const element = await new VlElement(this.driver, await this.shadowRoot.findElement(By.css('slot[name="no-content"]')));
+    return !(await element.hasAttribute('hidden'));
+  }
 }
 
 module.exports = VlRichData;
