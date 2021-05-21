@@ -119,20 +119,6 @@ export class VlRichData extends vlElement(HTMLElement) {
     }
   }
 
-  get __hasResults() {
-    return this._paging && this._paging.totalItems > 0;
-  }
-
-  __processContent() {
-    if (this.__hasResults) {
-      this.__contentSlot.hidden = false;
-      this.__noContentSlot.hidden = true;
-    } else {
-      this.__contentSlot.hidden = true;
-      this.__noContentSlot.hidden = false;
-    }
-  }
-
   /**
    * Geeft de data terug die in de tabel wordt getoond.
    * @return {Object[]}
@@ -234,6 +220,10 @@ export class VlRichData extends vlElement(HTMLElement) {
         totalItems: this.__pager.totalItems,
       };
     }
+  }
+
+  get __hasResults() {
+    return this._paging && this._paging.totalItems > 0;
   }
 
   set _paging(paging) {
@@ -374,6 +364,16 @@ export class VlRichData extends vlElement(HTMLElement) {
       this.__showSorter();
     } else {
       this.__hideSorter();
+    }
+  }
+
+  __processContent() {
+    if (this.__hasResults) {
+      this.__contentSlot.hidden = false;
+      this.__noContentSlot.hidden = true;
+    } else {
+      this.__contentSlot.hidden = true;
+      this.__noContentSlot.hidden = false;
     }
   }
 
