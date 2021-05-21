@@ -75,15 +75,13 @@ class VlRichData extends VlElement {
   }
 
   async contentIsVisible() {
-    const wrapper= await this.shadowRoot.findElement(By.css('#content-wrapper'));
-    const wrapperClass= await wrapper.getAttribute('class');
-    return !wrapperClass.split(' ').includes('vl-u-visually-hidden');
+    const element = await this.shadowRoot.findElement(By.css('slot[name="content"]'));
+    return element.isDisplayed();
   }
 
   async noContentIsVisible() {
-    const wrapper= await this.shadowRoot.findElement(By.css('#no-content-wrapper'));
-    const wrapperClass= await wrapper.getAttribute('class');
-    return !wrapperClass.split(' ').includes('vl-u-visually-hidden');
+    const element = await this.shadowRoot.findElement(By.css('slot[name="no-content"]'));
+    return element.isDisplayed();
   }
 }
 

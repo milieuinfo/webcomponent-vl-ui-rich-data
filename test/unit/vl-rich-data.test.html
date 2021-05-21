@@ -136,20 +136,16 @@
           },
         };
         customElements.whenDefined('vl-pager').then(() => {
-          assert.isTrue(element.__searchResults.classList.contains('vl-u-visually-hidden'));
-          assert.isTrue(element.__sorterContainer.classList.contains('vl-u-visually-hidden'));
-          assert.isTrue(element.shadowRoot.querySelector('#content-wrapper').classList.contains('vl-u-visually-hidden'));
-          assert.isFalse(element.shadowRoot.querySelector('#no-content-wrapper').classList.contains('vl-u-visually-hidden'));
+          assert.isTrue(element.__contentSlot.hidden);
+          assert.isFalse(element.__noContentSlot.hidden);
           element.data = {
             paging: {
               currentPage: 0,
               totalItems: 20,
             },
           };
-          assert.isFalse(element.__searchResults.classList.contains('vl-u-visually-hidden'));
-          assert.isFalse(element.__sorterContainer.classList.contains('vl-u-visually-hidden'));
-          assert.isFalse(element.shadowRoot.querySelector('#content-wrapper').classList.contains('vl-u-visually-hidden'));
-          assert.isTrue(element.shadowRoot.querySelector('#no-content-wrapper').classList.contains('vl-u-visually-hidden'));
+          assert.isFalse(element.__contentSlot.hidden);
+          assert.isTrue(element.__noContentSlot.hidden);
           done();
         });
       });

@@ -74,7 +74,7 @@ export class VlRichData extends vlElement(HTMLElement) {
                 </label>
                 <slot name="sorter"></slot>
               </div>
-              <div id="content-wrapper" is="vl-column" data-vl-size="12" data-vl-medium-size="12">
+              <div is="vl-column" data-vl-size="12" data-vl-medium-size="12">
                 <slot name="content">${content}</slot>
                 <slot name="no-content" hidden>Er werden geen resultaten gevonden</slot>
               </div>
@@ -203,8 +203,7 @@ export class VlRichData extends vlElement(HTMLElement) {
 
   get __formDataState() {
     if (this.__searchFilter && this.__searchFilter.formData) {
-      const hasFilterValue = [...this.__searchFilter.formData.values()].find(
-          Boolean);
+      const hasFilterValue = [...this.__searchFilter.formData.values()].find(Boolean);
       if (hasFilterValue) {
         return this.__searchFilter.formData;
       }
@@ -232,8 +231,7 @@ export class VlRichData extends vlElement(HTMLElement) {
         this.__pager.setAttribute('data-vl-current-page', paging.currentPage);
       }
       if (paging.itemsPerPage != null) {
-        this.__pager.setAttribute('data-vl-items-per-page',
-            paging.itemsPerPage);
+        this.__pager.setAttribute('data-vl-items-per-page', paging.itemsPerPage);
       }
       if (paging.totalItems != null) {
         this.__pager.setAttribute('data-vl-total-items', paging.totalItems);
@@ -323,8 +321,7 @@ export class VlRichData extends vlElement(HTMLElement) {
   }
 
   __setHiddenInModalElements(hidden) {
-    this.__searchFilter.querySelectorAll('[data-vl-hidden-in-modal]').forEach(
-        (element) => element.hidden = hidden);
+    this.__searchFilter.querySelectorAll('[data-vl-hidden-in-modal]').forEach((element) => element.hidden = hidden);
   }
 
   __observePager() {
