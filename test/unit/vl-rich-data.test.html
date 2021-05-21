@@ -114,8 +114,6 @@
         });
       });
 
-      // TODO: dit test niets, de manipulatie op de pager heeft geen gevolg op de view.
-      // Hij is van in het begin al leeg en daarom slaagt de test.
       test('wanneer de total items van de vl-pager leeg of undefined is, zal 0 getoond worden', (done) => {
         const element = fixture('vl-rich-data-pager-fixture');
         const pager = element.__pager;

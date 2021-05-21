@@ -31,7 +31,7 @@
     <vl-demo-page data-vl-webcomponent="vl-rich-data" data-vl-link="https://overheid.vlaanderen.be/webuniversum/v3/documentation/atoms/vl-ui-rich-data">
       <vl-demo data-vl-title="Rich data">
         <vl-rich-data id="rich-data" data-vl-filter-closable>
-          <span slot="no-content-message">Geen resultaten</span>
+          <span slot="no-content">Geen resultaten</span>
           <vl-search-results slot="content"></vl-search-results>
           <select is="vl-select" slot="sorter">
             <option value="id">ID</option>
@@ -321,7 +321,7 @@
 
       <vl-demo data-vl-title="Rich data zonder resultaten">
         <vl-rich-data id="rich-data-no-content" data-vl-filter-closable>
-          <span slot="no-content-message">Geen resultaten</span>
+          <span slot="no-content">Geen resultaten</span>
           <div is="vl-search-filter" data-vl-alt slot="filter">
             <form id="rich-data-no-content-table-filter-form" novalidate>
               <section>
