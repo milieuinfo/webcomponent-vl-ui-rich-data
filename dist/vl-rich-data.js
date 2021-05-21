@@ -1,4 +1,4 @@
-import {vlElement, define} from '/node_modules/vl-ui-core/dist/vl-core.js';
+import {define, vlElement} from '/node_modules/vl-ui-core/dist/vl-core.js';
 import '/node_modules/vl-ui-grid/dist/vl-grid.js';
 import '/node_modules/vl-ui-form-message/dist/vl-form-message.js';
 import '/node_modules/vl-ui-icon/dist/vl-icon.js';
@@ -25,7 +25,8 @@ import '/node_modules/vl-ui-pager/dist/vl-pager.js';
  */
 export class VlRichData extends vlElement(HTMLElement) {
   static get _observedAttributes() {
-    return ['data', 'collapsed-m', 'collapsed-s', 'collapsed-xs', 'filter-closable', 'filter-closed'];
+    return ['data', 'collapsed-m', 'collapsed-s', 'collapsed-xs',
+      'filter-closable', 'filter-closed'];
   }
 
   static get _defaultSearchColumnSize() {
@@ -74,8 +75,11 @@ export class VlRichData extends vlElement(HTMLElement) {
                 </label>
                 <slot name="sorter"></slot>
               </div>
-              <div is="vl-column" data-vl-size="12" data-vl-medium-size="12">
+              <div id="content-wrapper" is="vl-column" data-vl-size="12" data-vl-medium-size="12">
                 <slot name="content">${content}</slot>
+              </div>
+              <div id="no-content-wrapper" is="vl-column" data-vl-size="12" data-vl-medium-size="12" class="vl-u-visually-hidden">
+                <slot name="no-content-message"></slot>
               </div>
             </div>
           </div>
@@ -85,16 +89,17 @@ export class VlRichData extends vlElement(HTMLElement) {
         </div>
       </div>
     `);
-
-    this.__processSearchFilter();
-    this.__processSorter();
-
-    this.__observePager();
-    this.__observeFilterButtons();
+    this._observer = this.__observeChildren();
   }
 
   connectedCallback() {
-    this._observer = this.__observeSearchFilter();
+    this.__processSearchFilter();
+    this.__processSorter();
+    this.__toggleContent();
+
+    this.__observePager();
+    this.__observeFilterButtons();
+
     this.__updateNumberOfSearchResults();
   }
 
@@ -113,7 +118,40 @@ export class VlRichData extends vlElement(HTMLElement) {
       this._sorting = sorting;
       this._filter = filter;
       this.__data = object;
+      this.__toggleContent();
     }
+  }
+
+  __toggleContent() {
+    if (this.querySelector('[slot="no-content-message"]')) {
+      if (!this._paging || this._paging.totalItems === 0) {
+        this.__showNoContent();
+      } else {
+        this.__showContent();
+      }
+    }
+  }
+
+  __showContent() {
+    this.shadowRoot.querySelector('#content-wrapper').classList.remove(
+        'vl-u-visually-hidden');
+    this.shadowRoot.querySelector('#search-results').classList.remove(
+        'vl-u-visually-hidden');
+    this.shadowRoot.querySelector('#sorter').classList.remove(
+        'vl-u-visually-hidden');
+    this.shadowRoot.querySelector('#no-content-wrapper').classList.add(
+        'vl-u-visually-hidden');
+  }
+
+  __showNoContent() {
+    this.shadowRoot.querySelector('#content-wrapper').classList.add(
+        'vl-u-visually-hidden');
+    this.shadowRoot.querySelector('#search-results').classList.add(
+        'vl-u-visually-hidden');
+    this.shadowRoot.querySelector('#sorter').classList.add(
+        'vl-u-visually-hidden');
+    this.shadowRoot.querySelector('#no-content-wrapper').classList.remove(
+        'vl-u-visually-hidden');
   }
 
   /**
@@ -192,14 +230,15 @@ export class VlRichData extends vlElement(HTMLElement) {
 
   get __formDataState() {
     if (this.__searchFilter && this.__searchFilter.formData) {
-      const hasFilterValue = [...this.__searchFilter.formData.values()].find(Boolean);
+      const hasFilterValue = [...this.__searchFilter.formData.values()].find(
+          Boolean);
       if (hasFilterValue) {
         return this.__searchFilter.formData;
       }
     }
   }
 
-  get __pagingState() {
+  get _paging() {
     if (this.__pager) {
       return {
         currentPage: this.__pager.currentPage,
@@ -216,7 +255,8 @@ export class VlRichData extends vlElement(HTMLElement) {
         this.__pager.setAttribute('data-vl-current-page', paging.currentPage);
       }
       if (paging.itemsPerPage != null) {
-        this.__pager.setAttribute('data-vl-items-per-page', paging.itemsPerPage);
+        this.__pager.setAttribute('data-vl-items-per-page',
+            paging.itemsPerPage);
       }
       if (paging.totalItems != null) {
         this.__pager.setAttribute('data-vl-total-items', paging.totalItems);
@@ -251,7 +291,7 @@ export class VlRichData extends vlElement(HTMLElement) {
   __getState({paging}) {
     const state = {};
     state.formData = this.__formDataState;
-    state.paging = this.__pagingState;
+    state.paging = this._paging;
     if (!paging && state.paging) {
       state.paging.currentPage = 1;
     }
@@ -306,7 +346,8 @@ export class VlRichData extends vlElement(HTMLElement) {
   }
 
   __setHiddenInModalElements(hidden) {
-    this.__searchFilter.querySelectorAll('[data-vl-hidden-in-modal]').forEach((element) => element.hidden = hidden);
+    this.__searchFilter.querySelectorAll('[data-vl-hidden-in-modal]').forEach(
+        (element) => element.hidden = hidden);
   }
 
   __observePager() {
@@ -318,11 +359,14 @@ export class VlRichData extends vlElement(HTMLElement) {
     }
   }
 
-  __observeSearchFilter() {
+  __observeChildren() {
     const observer = new MutationObserver((mutations) => {
-      mutations = mutations.filter((mutation) => mutation.target && mutation.target.slot != 'content');
+      mutations = mutations.filter(
+          (mutation) => mutation.target && mutation.target.slot != 'content');
       if (mutations && mutations.length > 0) {
         this.__processSearchFilter();
+        this.__processSorter();
+        this.__toggleContent(this._paging);
       }
     });
     observer.observe(this, {childList: true});
@@ -388,7 +432,8 @@ export class VlRichData extends vlElement(HTMLElement) {
     } else {
       if (this.__pager) {
         customElements.whenDefined('vl-pager').then(() => {
-          this.__numberOfSearchResults.textContent = this.__pager.totalItems || 0;
+          this.__numberOfSearchResults.textContent = this.__pager.totalItems ||
+              0;
         });
       }
     }

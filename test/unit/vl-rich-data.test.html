@@ -25,6 +25,15 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="vl-rich-data-no-content-fixture">
+    <template>
+      <vl-rich-data>
+        <vl-pager slot="pager" total-items="25" items-per-page="5" current-page="1"></vl-pager>
+        <span slot="no-content">Geen resultaten gevonden</span>
+      </vl-rich-data>
+    </template>
+  </test-fixture>
+
   <script>
     suite('vl-rich-data', () => {
       const should = chai.should();
@@ -114,6 +123,29 @@
           should.exist(element.__numberOfSearchResults);
           assert.equal(element.__searchResults.innerText.trim(), `We vonden 0 resultaten`);
           assert.equal(element.__numberOfSearchResults.innerText, '0');
+          done();
+        });
+      });
+
+      test('wijzigen van de paging data in de component laat overeenkomstige views zien', (done) => {
+        const element = fixture('vl-rich-data-no-content-fixture');
+        element.data = {
+          paging: {
+            currentPage: 0,
+            totalItems: 0,
+          },
+        };
+        customElements.whenDefined('vl-pager').then(() => {
+          assert.isTrue(element.__contentSlot.hidden);
+          assert.isFalse(element.__noContentSlot.hidden);
+          element.data = {
+            paging: {
+              currentPage: 0,
+              totalItems: 20,
+            },
+          };
+          assert.isFalse(element.__contentSlot.hidden);
+          assert.isTrue(element.__noContentSlot.hidden);
           done();
         });
       });

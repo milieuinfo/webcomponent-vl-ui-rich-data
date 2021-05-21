@@ -1,4 +1,4 @@
-import {vlElement, define} from '/node_modules/vl-ui-core/dist/vl-core.js';
+import {define, vlElement} from '/node_modules/vl-ui-core/dist/vl-core.js';
 import '/node_modules/vl-ui-grid/dist/vl-grid.js';
 import '/node_modules/vl-ui-form-message/dist/vl-form-message.js';
 import '/node_modules/vl-ui-icon/dist/vl-icon.js';
@@ -76,6 +76,7 @@ export class VlRichData extends vlElement(HTMLElement) {
               </div>
               <div is="vl-column" data-vl-size="12" data-vl-medium-size="12">
                 <slot name="content">${content}</slot>
+                <slot name="no-content" hidden>Er werden geen resultaten gevonden</slot>
               </div>
             </div>
           </div>
@@ -90,9 +91,12 @@ export class VlRichData extends vlElement(HTMLElement) {
   connectedCallback() {
     this.__processSearchFilter();
     this.__processSorter();
+    this.__processContent();
+
     this.__observePager();
     this.__observeFilterButtons();
     this._observer = this.__observeSearchFilter();
+
     this.__updateNumberOfSearchResults();
   }
 
@@ -111,6 +115,7 @@ export class VlRichData extends vlElement(HTMLElement) {
       this._sorting = sorting;
       this._filter = filter;
       this.__data = object;
+      this.__processContent();
     }
   }
 
@@ -188,6 +193,14 @@ export class VlRichData extends vlElement(HTMLElement) {
     }
   }
 
+  get __contentSlot() {
+    return this.shadowRoot.querySelector('slot[name="content"]');
+  }
+
+  get __noContentSlot() {
+    return this.shadowRoot.querySelector('slot[name="no-content"]');
+  }
+
   get __formDataState() {
     if (this.__searchFilter && this.__searchFilter.formData) {
       const hasFilterValue = [...this.__searchFilter.formData.values()].find(Boolean);
@@ -197,7 +210,7 @@ export class VlRichData extends vlElement(HTMLElement) {
     }
   }
 
-  get __pagingState() {
+  get _paging() {
     if (this.__pager) {
       return {
         currentPage: this.__pager.currentPage,
@@ -206,6 +219,10 @@ export class VlRichData extends vlElement(HTMLElement) {
         totalItems: this.__pager.totalItems,
       };
     }
+  }
+
+  get __hasResults() {
+    return this._paging && this._paging.totalItems > 0;
   }
 
   set _paging(paging) {
@@ -249,7 +266,7 @@ export class VlRichData extends vlElement(HTMLElement) {
   __getState({paging}) {
     const state = {};
     state.formData = this.__formDataState;
-    state.paging = this.__pagingState;
+    state.paging = this._paging;
     if (!paging && state.paging) {
       state.paging.currentPage = 1;
     }
@@ -323,7 +340,7 @@ export class VlRichData extends vlElement(HTMLElement) {
         this.__processSearchFilter();
       }
     });
-    observer.observe(this, {childList: true});
+    observer.observe(this, {childList: true, subtree: true});
     return observer;
   }
 
@@ -344,6 +361,16 @@ export class VlRichData extends vlElement(HTMLElement) {
       this.__showSorter();
     } else {
       this.__hideSorter();
+    }
+  }
+
+  __processContent() {
+    if (this.__hasResults) {
+      this.__contentSlot.hidden = false;
+      this.__noContentSlot.hidden = true;
+    } else {
+      this.__contentSlot.hidden = true;
+      this.__noContentSlot.hidden = false;
     }
   }
 
