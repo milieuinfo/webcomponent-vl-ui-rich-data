@@ -340,7 +340,7 @@ export class VlRichData extends vlElement(HTMLElement) {
         this.__processSearchFilter();
       }
     });
-    observer.observe(this, {childList: true, subtree: true});
+    observer.observe(this, {childList: true});
     return observer;
   }
 
