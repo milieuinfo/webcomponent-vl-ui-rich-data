@@ -6748,7 +6748,7 @@ a.vl-vi {
 
     this.__observePager();
     this.__observeFilterButtons();
-    this._observer = this.__observeSearchFilter();
+    this._observer = this.__observeSearchFilter(() => this.__processSearchFilter());
 
     this.__updateNumberOfSearchResults();
   }
@@ -6986,11 +6986,11 @@ a.vl-vi {
     }
   }
 
-  __observeSearchFilter() {
+  __observeSearchFilter(callback) {
     const observer = new MutationObserver((mutations) => {
       mutations = mutations.filter((mutation) => mutation.target && mutation.target.slot != 'content');
       if (mutations && mutations.length > 0) {
-        this.__processSearchFilter();
+        callback();
       }
     });
     observer.observe(this, {childList: true});
@@ -7003,6 +7003,7 @@ a.vl-vi {
       this.__showSearchColumn();
       this.__showSearchResults();
       this.__addSearchFilterEventListeners();
+      this.__observeMobileModal(() => this.__processScrollableBody());
     } else {
       this.__hideSearchColumn();
       this.__hideSearchResults();
@@ -7093,6 +7094,28 @@ a.vl-vi {
     event.stopPropagation();
     event.preventDefault();
     this.__onStateChange(event);
+  }
+
+  __observeMobileModal(callback) {
+    const observer = new MutationObserver(callback);
+    observer.observe(this.__searchFilter, {attributeFilter: ['data-vl-mobile-modal']});
+    return observer;
+  }
+
+  __processScrollableBody() {
+    if (this.__searchFilter.hasAttribute('data-vl-mobile-modal')) {
+      this.__disableBodyScroll();
+    } else {
+      this.__enableBodyScroll();
+    }
+  }
+
+  __disableBodyScroll() {
+    document.body.style.overflow = 'hidden';
+  }
+
+  __enableBodyScroll() {
+    document.body.style.overflow = 'auto';
   }
 }
 

@@ -178,6 +178,28 @@ describe('vl-rich-data', async () => {
     await searchFilterName.clear();
   });
 
+  it('als gebruiker wordt ik op de hoogte gebracht wanneer er geen resultaten zijn', async () => {
+    const richData = await vlRichDataPage.getRichData();
+    const searchFilter = await richData.getSearchFilter();
+    const searchFilterName = await vlRichDataPage.getSearchFilterInputFieldByName(searchFilter, 'name');
+
+    await assert.eventually.isFalse(richData.noContentIsVisible());
+    await assert.eventually.isTrue(richData.contentIsVisible());
+
+    await assert.eventually.equal(richData.getNumberOfSearchResults(), 25);
+    await searchFilterName.setValue('geen resultaten');
+    await assert.eventually.equal(richData.getNumberOfSearchResults(), 0);
+
+    await assert.eventually.isTrue(richData.noContentIsVisible());
+    await assert.eventually.isFalse(richData.contentIsVisible());
+
+    await searchFilterName.clear();
+    await assert.eventually.equal(richData.getNumberOfSearchResults(), 25);
+
+    await assert.eventually.isFalse(richData.noContentIsVisible());
+    await assert.eventually.isTrue(richData.contentIsVisible());
+  });
+
   it('als gebruiker met een klein scherm, kan ik de filter openen als modal, gebruiken en terug sluiten', async () => {
     await changeWindowWidth(750);
     const richData = await vlRichDataPage.getRichData();
@@ -196,28 +218,6 @@ describe('vl-rich-data', async () => {
     await richData.openModalSearchFilter();
     await searchFilterId.clear();
     await searchFilterName.clear();
-  });
-
-  it('als gebruiker wordt ik op de hoogte gebracht wanneer er geen resultaten zijn', async () => {
-    const richData = await vlRichDataPage.getRichData();
-    const searchFilter = await richData.getSearchFilter();
-    const searchFilterName = await vlRichDataPage.getSearchFilterInputFieldByName(searchFilter, 'name');
-
-    await assert.eventually.isFalse(richData.noContentIsVisible());
-    await assert.eventually.isTrue(richData.contentIsVisible());
-
-    await assert.eventually.equal(richData.getNumberOfSearchResults(), 25);
-    await searchFilterName.setValue('jbibbfbdf');
-    await assert.eventually.equal(richData.getNumberOfSearchResults(), 0);
-
-    await assert.eventually.isTrue(richData.noContentIsVisible());
-    await assert.eventually.isFalse(richData.contentIsVisible());
-
-    await searchFilterName.clear();
-    await assert.eventually.equal(richData.getNumberOfSearchResults(), 25);
-
-    await assert.eventually.isFalse(richData.noContentIsVisible());
-    await assert.eventually.isTrue(richData.contentIsVisible());
   });
 
   const changeWindowWidth = async (size) => {

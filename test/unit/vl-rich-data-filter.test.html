@@ -11,6 +11,7 @@
     <script type="module" src="/node_modules/vl-ui-input-field/dist/vl-input-field.js"></script>
     <script type="module" src="/node_modules/vl-ui-button/dist/vl-button.js"></script>
     <script type="module" src="/node_modules/vl-ui-pager/dist/vl-pager.js"></script>
+    <script type="module" src="/node_modules/vl-ui-form/dist/vl-form-all.js"></script>
 
     <link rel="stylesheet" type="text/css" href="/node_modules/vl-ui-search-filter/dist/style.css"/>
     <link rel="stylesheet" type="text/css" href="/node_modules/vl-ui-input-field/dist/style.css"/>
@@ -31,7 +32,7 @@
     <template>
       <vl-rich-data data-vl-filter-title='title'>
         <div is="vl-search-filter" slot="filter">
-          <form id="form">
+          <form is="vl-form" id="form">
             <label>Hier kunnen filtervelden komen</label>
             <input is="vl-input-field" type="text" name="filter1"/>
           </form>
@@ -48,7 +49,7 @@
     <template>
       <vl-rich-data data-vl-filter-title='title' data-vl-filter-closable>
         <div is="vl-search-filter" slot="filter">
-          <form id="form">
+          <form is="vl-form" id="form">
             <label>Hier kunnen filtervelden komen</label>
             <input is="vl-input-field" type="text" name="filter1"/>
             <div>
@@ -70,7 +71,7 @@
     <template>
       <vl-rich-data data-vl-filter-title='title' data-vl-filter-closable>
         <div is="vl-search-filter" slot="filter">
-          <form id="form">
+          <form is="vl-form" id="form">
             <label>Hier kunnen filtervelden komen</label>
             <input is="vl-input-field" type="text" name="filter1"/>
           </form>
@@ -181,7 +182,7 @@
         filter.setAttribute('slot', 'filter');
         filter.innerHTML = `
           <div is="vl-search-filter">
-            <form id="form">
+            <form is="vl-form" id="form">
               <label>Hier kunnen filtervelden komen</label>
               <input is="vl-input-field" type="text" name="filter1"/>
             </form>
@@ -360,6 +361,20 @@
 
         assert.equal(toggleText, 'Foo');
         assert.equal(closeText, 'Bar');
+      });
+
+      test('bij het openen en sluiten van de zoek filter op mobiele toestellen zal bepaald worden of de body scrollable is', (done) => {
+        const element = fixture('vl-rich-data-closable-filter-fixture');
+        assert.notEqual(document.body.style.overflow, 'hidden');
+        element.__filterOpenButton.click();
+        setTimeout(() => {
+          assert.equal(document.body.style.overflow, 'hidden');
+          element.__searchFilter._submitButton.click();
+          setTimeout(() => {
+            assert.notEqual(document.body.style.overflow, 'hidden');
+            done();
+          });
+        });
       });
 
       const setInputValue = (input, value) => {
