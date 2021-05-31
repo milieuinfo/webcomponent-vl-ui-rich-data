@@ -16,9 +16,6 @@ import '/node_modules/vl-ui-pager/dist/vl-pager.js';
  * @property {boolean} data-vl-filter-closable - Attribuut dat de filter sluitbaar maakt en een knop getoond wordt om de filter te tonen en terug te verbergen. Op een klein scherm wordt een modal geopend bij het klikken op de filter knop ipv een de filter naast de tabel te tonen. Om elementen van de filter te verbergen enkel in de modal, kan het attribuut data-vl-hidden-in-modal gezet worden.
  * @property {boolean} data-vl-filter-closed - Attribuut dat aangeeft of dat de filter gesloten is.
  *
- * @slot toggle-filter-button-text - slot om de tekst te kunnen wijzigen van de toggle filter knop. Default: Filter.
- * @slot close-filter-button-text - slot om de onzichtbare tekst te kunnen wijzigen van de filter sluit knop. Default: Filter sluiten.
- *
  * @see {@link https://www.github.com/milieuinfo/webcomponent-vl-ui-rich-data/releases/latest|Release notes}
  * @see {@link https://www.github.com/milieuinfo/webcomponent-vl-ui-rich-data/issues|Issues}
  * @see {@link https://webcomponenten.omgeving.vlaanderen.be/demo/vl-rich-data.html|Demo}
@@ -55,10 +52,6 @@ export class VlRichData extends vlElement(HTMLElement) {
             </button>
           </div>
           <div id="search" is="vl-column" data-vl-size="0" data-vl-medium-size="0" data-vl-small-size="0" data-vl-extra-small-size="0">
-            <button id="close-filter-button" class="vl-filter__close" hidden type="button">
-              <span is="vl-icon" data-vl-icon="close"></span>
-              <span class="vl-u-visually-hidden"><slot name="close-filter-button-text">Filter sluiten</slot></span>
-            </button>
             <div id="filter-slot-container">
               <slot id="filter-slot" name="filter"></slot>
             </div>
@@ -133,10 +126,6 @@ export class VlRichData extends vlElement(HTMLElement) {
 
   get __searchFilter() {
     return this.querySelector('[slot="filter"]');
-  }
-
-  get __filterCloseButton() {
-    return this.shadowRoot.querySelector('#close-filter-button');
   }
 
   get __filterSlotContainer() {
@@ -274,7 +263,6 @@ export class VlRichData extends vlElement(HTMLElement) {
   }
 
   _filterClosableChangedCallback(oldValue, newValue) {
-    this.__filterCloseButton.hidden = newValue == null;
     this.__filterToggleContainer.hidden = newValue == null;
     this.__filterOpenContainer.hidden = newValue == null;
     if (newValue == null) {
@@ -295,9 +283,6 @@ export class VlRichData extends vlElement(HTMLElement) {
   }
 
   __observeFilterButtons() {
-    this.__filterCloseButton.addEventListener('click', () => {
-      this.setAttribute('data-vl-filter-closed', '');
-    });
     this.__filterToggleButton.addEventListener('click', () => {
       this.__filterSlotContainer.appendChild(this.__filterSlot);
       this.__searchFilter.hidden = false;

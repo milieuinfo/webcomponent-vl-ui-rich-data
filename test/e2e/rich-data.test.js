@@ -122,18 +122,6 @@ describe('vl-rich-data', async () => {
     await searchFilterName.clear();
   });
 
-  it('als gebruiker kan ik de filter sluiten met de sluit knop en terug openen met de filter knop', async () => {
-    const richData = await vlRichDataPage.getRichData();
-    const filter = await richData.getSearchFilter();
-    await assert.eventually.isTrue(filter.isDisplayed());
-
-    await richData.closeSearchFilter();
-    await assert.eventually.isFalse(filter.isDisplayed());
-
-    await richData.toggleSearchFilter();
-    await assert.eventually.isTrue(filter.isDisplayed());
-  });
-
   it('als gebruiker kan ik de filter sluiten en terug openen met de filter knop', async () => {
     const richData = await vlRichDataPage.getRichData();
     const filter = await richData.getSearchFilter();

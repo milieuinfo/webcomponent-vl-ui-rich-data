@@ -13,15 +13,6 @@
 // ==========================================================================
 @import "vl-ui-util/src/scss/util";
 
-.vl-filter__close {
-    position: absolute;
-    top: 8px;
-    right: 0;
-    padding: 3px 0px 0px 0px;
-    border: 0;
-    overflow: hidden;
-}
-
 #search-results, #sorter {
     line-height: 2em;
 }
