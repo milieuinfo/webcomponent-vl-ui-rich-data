@@ -377,6 +377,15 @@
         });
       });
 
+      test('bij het openen en sluiten van de filter zal het aria-label van de button gewijzigd worden', () => {
+        const element = fixture('vl-rich-data-closable-filter-fixture');
+        assert.equal(element.__filterToggleButton.getAttribute('aria-label'), 'Verberg de filter');
+        element.__filterToggleButton.click();
+        assert.equal(element.__filterToggleButton.getAttribute('aria-label'), 'Toon de filter');
+        element.__filterToggleButton.click();
+        assert.equal(element.__filterToggleButton.getAttribute('aria-label'), 'Verberg de filter');
+      });
+
       const setInputValue = (input, value) => {
         input.value = value;
         input.dispatchEvent(new CustomEvent('input', {detail: 'dummy-event', bubbles: true}));

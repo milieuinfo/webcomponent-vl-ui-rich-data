@@ -45,7 +45,7 @@ export class VlRichData extends vlElement(HTMLElement) {
       <div>
         <div is="vl-grid" is-stacked>
           <div id="toggle-filter" is="vl-column" class="vl-u-align-right vl-u-hidden--s" hidden data-vl-size="12" data-vl-medium-size="12">
-            <button id="toggle-filter-button" is="vl-button" data-vl-secondary data-vl-narrow type="button" aria-label="Toon de filter">
+            <button id="toggle-filter-button" is="vl-button" data-vl-secondary data-vl-narrow type="button" aria-label="Verberg de filter">
               <span is="vl-icon" data-vl-icon="content-filter" data-vl-before></span><slot name="toggle-filter-button-text">Filter</slot>
             </button>
           </div>
@@ -347,7 +347,9 @@ export class VlRichData extends vlElement(HTMLElement) {
   __processSearchFilter() {
     if (this.__searchFilter) {
       this.__searchFilter.setAttribute('data-vl-alt', '');
-      this.__showSearchColumn();
+      if (!this.hasAttribute('data-vl-filter-closed')) {
+        this.__showSearchColumn();
+      }
       this.__showSearchResults();
       this.__addSearchFilterEventListeners();
       this.__observeMobileModal(() => this.__processScrollableBody());
@@ -378,6 +380,7 @@ export class VlRichData extends vlElement(HTMLElement) {
   __hideSearchColumn() {
     this.__searchColumn.hidden = true;
     this.__setGridColumnWidth(0);
+    this.__filterToggleButton.setAttribute('aria-label', 'Toon de filter');
   }
 
   __hideSearchResults() {
@@ -391,6 +394,7 @@ export class VlRichData extends vlElement(HTMLElement) {
   __showSearchColumn() {
     this.__searchColumn.hidden = false;
     this.__setGridColumnWidth(VlRichData._defaultSearchColumnSize);
+    this.__filterToggleButton.setAttribute('aria-label', 'Verberg de filter');
   }
 
   __showSearchResults() {
