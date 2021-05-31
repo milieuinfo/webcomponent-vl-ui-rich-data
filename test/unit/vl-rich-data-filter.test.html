@@ -357,11 +357,11 @@
 
       test('bij het openen en sluiten van de filter zal het aria-label van de button gewijzigd worden', () => {
         const element = fixture('vl-rich-data-closable-filter-fixture');
-        assert.equal(element.__filterToggleButton.getAttribute('aria-label'), 'Verberg de filter');
+        assert.equal(element.__filterToggleButton.getAttribute('aria-label'), 'Filter verbergen');
         element.__filterToggleButton.click();
-        assert.equal(element.__filterToggleButton.getAttribute('aria-label'), 'Toon de filter');
+        assert.equal(element.__filterToggleButton.getAttribute('aria-label'), 'Filter tonen');
         element.__filterToggleButton.click();
-        assert.equal(element.__filterToggleButton.getAttribute('aria-label'), 'Verberg de filter');
+        assert.equal(element.__filterToggleButton.getAttribute('aria-label'), 'Filter verbergen');
       });
 
       const setInputValue = (input, value) => {
