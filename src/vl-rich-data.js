@@ -61,7 +61,7 @@ export class VlRichData extends vlElement(HTMLElement) {
           </div>
           <div id="content" is="vl-column" data-vl-size="12" data-vl-medium-size="12" data-vl-small-size="12" data-vl-extra-small-size="12">
             <div is="vl-grid" is-stacked>
-              <div id="search-results" is="vl-column" data-vl-size="6" data-vl-medium-size="6" data-vl-small-size="6" data-vl-extra-small-size="6">
+              <div id="search-results" is="vl-column" data-vl-size="6" data-vl-medium-size="6" data-vl-small-size="6" data-vl-extra-small-size="6" aria-live="polite">
                 <span>We vonden</span> <strong><span id="search-results-number">0</span> resultaten</strong>
               </div>
               <div id="sorter" is="vl-column" data-vl-size="6" data-vl-medium-size="6" data-vl-small-size="6" data-vl-extra-small-size="6">
