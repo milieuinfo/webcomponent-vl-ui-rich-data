@@ -65,7 +65,7 @@ export class VlRichData extends vlElement(HTMLElement) {
                 <span>We vonden</span> <strong><span id="search-results-number">0</span> resultaten</strong>
               </div>
               <div id="sorter" is="vl-column" data-vl-size="6" data-vl-medium-size="6" data-vl-small-size="6" data-vl-extra-small-size="6">
-                <label is="vl-form-label" for="filter-sort">
+                <label is="vl-form-label">
                   Sorteer
                 </label>
                 <slot name="sorter"></slot>
