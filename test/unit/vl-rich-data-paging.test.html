@@ -8,6 +8,8 @@
 
     <script type="module" src="../../src/vl-rich-data.js"></script>
     <script type="module" src="/node_modules/vl-ui-pager/dist/vl-pager.js"></script>
+    <script type="module" src="/node_modules/vl-ui-search-results/dist/vl-search-results-all.js"></script>
+
     <link rel="stylesheet" type="text/css" href="/node_modules/vl-ui-core/dist/style.css"/>
 </head>
 
@@ -16,6 +18,11 @@
     <template>
       <vl-rich-data>
         <vl-pager slot="pager" data-vl-total-items="20" data-vl-items-per-page="5" data-vl-current-page="1"></vl-pager>
+        <vl-search-results slot="content">
+          <vl-search-result>
+            <a href="#" slot="title">Vlaanderenkiest.be</a>
+          </vl-search-result>
+        </vl-search-results>
       </vl-rich-data>
     </template>
   </test-fixture>
@@ -48,6 +55,14 @@
         const pager = element.shadowRoot.querySelector('slot[name="pager"]').assignedElements()[0];
         assert.equal(pager.currentPage, 1);
         pager.shadowRoot.querySelector('#page-forward-link').click();
+      });
+
+      test('wanneer de pager verandert krijgt de a tag van het eerste zoekresultaat focus', () => {
+        const element = fixture('vl-rich-data-pager-fixture');
+        const pager = element.shadowRoot.querySelector('slot[name="pager"]').assignedElements()[0];
+        assert.notEqual(element.__contentSlot.assignedNodes()[0].children[0].querySelector('a'), document.activeElement);
+        pager.shadowRoot.querySelector('#page-forward-link').click();
+        assert.equal(element.__contentSlot.assignedNodes()[0].children[0].querySelector('a'), document.activeElement);
       });
     });
   </script>

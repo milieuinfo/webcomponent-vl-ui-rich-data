@@ -325,6 +325,7 @@ export class VlRichData extends vlElement(HTMLElement) {
       this.__pager.setAttribute('data-vl-align-right', true);
       this.__pager.addEventListener('change', (e) => {
         this.__onStateChange(e, {paging: true});
+        this.__contentSlot?.assignedNodes()[0]?.children[0]?.querySelector('a')?.focus();
       });
     }
   }
