@@ -144,16 +144,12 @@ describe('vl-rich-data', async () => {
 
     let searchResults = await vlRichDataPage.getSearchResults(richData);
     let searchResult = await searchResults.getSearchResult(1);
-    let titleSlotElements = await searchResult.titleSlotElements();
-    let title = titleSlotElements[0];
-    await assert.eventually.equal(title.getText(), 'Project #1');
+    await assert.eventually.equal(searchResult.getTitle(), 'Project #1');
 
     await sorter.selectByText('Naam manager');
     searchResults = await vlRichDataPage.getSearchResults(richData);
     searchResult = await searchResults.getSearchResult(1);
-    titleSlotElements = await searchResult.titleSlotElements();
-    title = titleSlotElements[0];
-    await assert.eventually.equal(title.getText(), 'Project #2');
+    await assert.eventually.equal(searchResult.getTitle(), 'Project #2');
 
     await sorter.selectByText('ID');
   });

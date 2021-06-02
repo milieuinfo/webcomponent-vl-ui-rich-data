@@ -32,7 +32,7 @@
       <vl-demo data-vl-title="Rich data">
         <vl-rich-data id="rich-data" data-vl-filter-closable>
           <span slot="no-content">Geen resultaten</span>
-          <vl-search-results slot="content"></vl-search-results>
+          <ul is="vl-search-results" slot="content"></ul>
           <select is="vl-select" slot="sorter" aria-label="Sorteer">
             <option value="id">ID</option>
             <option value="manager.lastName">Naam manager</option>
@@ -214,10 +214,10 @@
                   const manager = project.manager;
                   const medewerker = project.medewerkers[0];
                   const html = `
-                    <vl-search-result>
-                      <a href="#" slot="title">${project.name}</a>
-                      <time slot="sub-title">Gestart op ${now}</time>
-                      <dl slot="content">
+                    <li is="vl-search-result">
+                      <a href="#">${project.name}</a>
+                      <time>Gestart op ${now}</time>
+                      <dl>
                         <dt>ID</dt>
                         <dd>${project.id}</dd>
                         <dt>Naam manager</dt>
@@ -227,7 +227,7 @@
                         <dt>Project o.l.v. <b>manager</b></dt>
                         <dd>${project.name} o.l.v. <b>${manager.firstName} ${manager.lastName}</b></dd>
                       </dl>
-                    </vl-search-result>
+                    </li>
                   `;
                   content.insertAdjacentHTML('beforeend', html);
                 });
