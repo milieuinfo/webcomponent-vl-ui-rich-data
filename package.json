@@ -60,7 +60,7 @@
 		"vl-ui-form-validation": "^4.0.0",
 		"vl-ui-input-field": "^3.2.11",
 		"vl-ui-search-filter": "^3.3.3",
-		"vl-ui-search-results": "^1.0.4",
+		"vl-ui-search-results": "^2.0.0",
 		"vl-ui-select": "^4.3.1",
 		"vl-ui-util": "^5.3.13"
 	}
