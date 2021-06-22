@@ -240,13 +240,11 @@
       test('als het data-vl-filter-closable attribuut wordt gezet, worden de sluit knop, open knop en filter container met filter knop getoond', () => {
         const element = fixture('vl-rich-data-filter-fixture');
         assert.isTrue(element.__filterToggleContainer.hidden);
-        assert.isTrue(element.__filterCloseButton.hidden);
         assert.isTrue(element.__filterOpenContainer.hidden);
 
         element.setAttribute('data-vl-filter-closable', '');
 
         assert.isFalse(element.__filterToggleContainer.hidden);
-        assert.isFalse(element.__filterCloseButton.hidden);
         assert.isFalse(element.__filterOpenContainer.hidden);
       });
 
@@ -290,15 +288,6 @@
           assert.equal(search.getAttribute(size), '4');
         });
         assert.isFalse(search.hidden);
-      });
-
-      test('als op de sluitknop wordt geklikt, wordt het attribuut data-vl-filter-closed gezet', () => {
-        const element = fixture('vl-rich-data-closable-filter-fixture');
-        assert.isFalse(element.hasAttribute('data-vl-filter-closed'));
-
-        element.__filterCloseButton.click();
-
-        assert.isTrue(element.hasAttribute('data-vl-filter-closed'));
       });
 
       test('als op de open knop wordt geklikt, wordt het attribuut data-vl-filter-closed gezet en de filter modal geopend met de filter als content', () => {
@@ -352,20 +341,8 @@
         assert.isFalse(element.querySelector('#hidden-in-modal').hidden);
       });
 
-      test('door slots te zetten, kunnen de teksten van de filter en toggle knoppen gewijzigd worden', () => {
-        const element = fixture('vl-rich-data-text-fixture');
-        const toggleButton = element.__filterToggleButton;
-        const filterCloseButton = element.__filterCloseButton;
-        const toggleText = toggleButton.querySelector('slot[name=toggle-filter-button-text]').assignedElements()[0].innerHTML;
-        const closeText = filterCloseButton.querySelector('slot[name=close-filter-button-text]').assignedElements()[0].innerHTML;
-
-        assert.equal(toggleText, 'Foo');
-        assert.equal(closeText, 'Bar');
-      });
-
       test('bij het openen en sluiten van de zoek filter op mobiele toestellen zal bepaald worden of de body scrollable is', (done) => {
         const element = fixture('vl-rich-data-closable-filter-fixture');
-        assert.notEqual(document.body.style.overflow, 'hidden');
         element.__filterOpenButton.click();
         setTimeout(() => {
           assert.equal(document.body.style.overflow, 'hidden');
@@ -375,6 +352,15 @@
             done();
           });
         });
+      });
+
+      test('bij het openen en sluiten van de filter zal het aria-label van de button gewijzigd worden', () => {
+        const element = fixture('vl-rich-data-closable-filter-fixture');
+        assert.equal(element.__filterToggleButton.getAttribute('aria-label'), 'Filter verbergen');
+        element.__filterToggleButton.click();
+        assert.equal(element.__filterToggleButton.getAttribute('aria-label'), 'Filter tonen');
+        element.__filterToggleButton.click();
+        assert.equal(element.__filterToggleButton.getAttribute('aria-label'), 'Filter verbergen');
       });
 
       const setInputValue = (input, value) => {

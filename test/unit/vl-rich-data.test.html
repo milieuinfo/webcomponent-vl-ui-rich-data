@@ -149,6 +149,11 @@
           done();
         });
       });
+
+      test('het aantal zoekresultaten heeft een polite aria-live attribuut in kader van WCAG', () => {
+        const element = fixture('vl-rich-data-pager-fixture');
+        assert.equal(element.__searchResults.getAttribute('aria-live'), 'polite');
+      });
     });
   </script>
 </body>
