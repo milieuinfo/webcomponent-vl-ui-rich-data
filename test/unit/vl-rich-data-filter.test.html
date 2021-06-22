@@ -343,7 +343,6 @@
 
       test('bij het openen en sluiten van de zoek filter op mobiele toestellen zal bepaald worden of de body scrollable is', (done) => {
         const element = fixture('vl-rich-data-closable-filter-fixture');
-        assert.notEqual(document.body.style.overflow, 'hidden');
         element.__filterOpenButton.click();
         setTimeout(() => {
           assert.equal(document.body.style.overflow, 'hidden');
