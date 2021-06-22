@@ -20,6 +20,10 @@ describe('vl-rich-data', async () => {
     }
   });
 
+  it('WCAG', async () => {
+    await assert.eventually.isFalse(vlRichDataPage.hasWcagIssues());
+  }).timeout(20000);
+
   it('als gebruiker kan ik de content filteren', async () => {
     const richData = await vlRichDataPage.getRichData();
     const searchFilter = await richData.getSearchFilter();
@@ -122,18 +126,6 @@ describe('vl-rich-data', async () => {
     await searchFilterName.clear();
   });
 
-  it('als gebruiker kan ik de filter sluiten met de sluit knop en terug openen met de filter knop', async () => {
-    const richData = await vlRichDataPage.getRichData();
-    const filter = await richData.getSearchFilter();
-    await assert.eventually.isTrue(filter.isDisplayed());
-
-    await richData.closeSearchFilter();
-    await assert.eventually.isFalse(filter.isDisplayed());
-
-    await richData.toggleSearchFilter();
-    await assert.eventually.isTrue(filter.isDisplayed());
-  });
-
   it('als gebruiker kan ik de filter sluiten en terug openen met de filter knop', async () => {
     const richData = await vlRichDataPage.getRichData();
     const filter = await richData.getSearchFilter();
@@ -152,16 +144,12 @@ describe('vl-rich-data', async () => {
 
     let searchResults = await vlRichDataPage.getSearchResults(richData);
     let searchResult = await searchResults.getSearchResult(1);
-    let titleSlotElements = await searchResult.titleSlotElements();
-    let title = titleSlotElements[0];
-    await assert.eventually.equal(title.getText(), 'Project #1');
+    await assert.eventually.equal(searchResult.getTitle(), 'Project #1');
 
     await sorter.selectByText('Naam manager');
     searchResults = await vlRichDataPage.getSearchResults(richData);
     searchResult = await searchResults.getSearchResult(1);
-    titleSlotElements = await searchResult.titleSlotElements();
-    title = titleSlotElements[0];
-    await assert.eventually.equal(title.getText(), 'Project #2');
+    await assert.eventually.equal(searchResult.getTitle(), 'Project #2');
 
     await sorter.selectByText('ID');
   });
