@@ -22,7 +22,7 @@ describe('vl-rich-data', async () => {
 
   it('WCAG', async () => {
     await assert.eventually.isFalse(vlRichDataPage.hasWcagIssues());
-  }).timeout(20000);
+  }).timeout(30000);
 
   it('als gebruiker kan ik de content filteren', async () => {
     const richData = await vlRichDataPage.getRichData();
