@@ -105,12 +105,12 @@ export class VlRichData extends vlElement(HTMLElement) {
    * @param {Object[]} object - Een Array van objecten die de data voorstellen.
    */
   set data(object) {
-    if (this.__data !== object) {
+    if (this._data !== object) {
       const {paging, sorting, filter} = object;
       this._paging = paging;
       this._sorting = sorting;
       this._filter = filter;
-      this.__data = object;
+      this._data = object;
       this.__processContent();
     }
   }
@@ -120,7 +120,7 @@ export class VlRichData extends vlElement(HTMLElement) {
    * @return {Object[]}
    */
   get data() {
-    return this.__data || {data: []};
+    return this._data || {data: []};
   }
 
   get __contentColumn() {
