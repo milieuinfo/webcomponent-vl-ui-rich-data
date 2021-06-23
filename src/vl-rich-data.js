@@ -105,12 +105,12 @@ export class VlRichData extends vlElement(HTMLElement) {
    * @param {Object[]} object - Een Array van objecten die de data voorstellen.
    */
   set data(object) {
-    if (this.__data !== object) {
+    if (this._data !== object) {
       const {paging, sorting, filter} = object;
       this._paging = paging;
       this._sorting = sorting;
       this._filter = filter;
-      this.__data = object;
+      this._data = object;
       this.__processContent();
     }
   }
@@ -120,7 +120,7 @@ export class VlRichData extends vlElement(HTMLElement) {
    * @return {Object[]}
    */
   get data() {
-    return this.__data || {data: []};
+    return this._data || {data: []};
   }
 
   get __contentColumn() {
@@ -221,7 +221,7 @@ export class VlRichData extends vlElement(HTMLElement) {
     }
   }
 
-  get __hasResults() {
+  get _hasResults() {
     return this._paging && this._paging.totalItems > 0;
   }
 
@@ -365,7 +365,7 @@ export class VlRichData extends vlElement(HTMLElement) {
   }
 
   __processContent() {
-    if (this.__hasResults) {
+    if (this._hasResults) {
       this.__contentSlot.hidden = false;
       this.__noContentSlot.hidden = true;
     } else {

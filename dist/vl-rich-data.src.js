@@ -226,7 +226,7 @@ export class VlRichData extends vlElement(HTMLElement) {
     }
   }
 
-  get __hasResults() {
+  get _hasResults() {
     return this._paging && this._paging.totalItems > 0;
   }
 
@@ -370,7 +370,7 @@ export class VlRichData extends vlElement(HTMLElement) {
   }
 
   __processContent() {
-    if (this.__hasResults) {
+    if (this._hasResults) {
       this.__contentSlot.hidden = false;
       this.__noContentSlot.hidden = true;
     } else {
